@@ -1,0 +1,622 @@
+{
+  "name": "🏢 WORKFLOW A - HUB COMMERCIAL (Landing + Vente)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "sticky-note-intro",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 140],
+      "parameters": {
+        "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP\n\n**Configuration requise :**\n- Google Sheets avec onglet 'Prospects'\n- Brevo (2 listes : Leads + Clients)\n- Stripe Webhook configuré\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
+        "height": 340,
+        "width": 420
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-capture",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "webhook-landing",
+      "name": "🔗 Webhook Landing Page",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [640, 240],
+      "webhookId": "lead-capture-rdm"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-webhook",
+        "options": {
+          "responseMode": "onReceived"
+        }
+      },
+      "id": "webhook-stripe",
+      "name": "💳 Webhook Stripe",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [640, 580],
+      "webhookId": "stripe-success-rdm"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.type }}",
+              "operation": "equals",
+              "value2": "checkout.session.completed"
+            }
+          ]
+        }
+      },
+      "id": "if-checkout-completed",
+      "name": "✅ IF Checkout Completed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [880, 580]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Prospects",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.body.email }}",
+            "Source": "={{ $json.body.source || 'landing-page' }}",
+            "Date_Inscription": "={{ $now.format('YYYY-MM-DD HH:mm:ss') }}",
+            "Statut": "LEAD",
+            "Tags": "pdf-telecharge"
+          }
+        },
+        "options": {}
+      },
+      "id": "gsheet-append-lead",
+      "name": "📊 GSheet - Ajouter Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [920, 160],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
+          "name": "Google Sheets Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
+        "additionalFields": {
+          "listIds": ["=== LIST ID BREVO 'LEADS LANDING PAGE' ==="],
+          "attributes": {
+            "attribute": [
+              {
+                "key": "SOURCE",
+                "value": "landing-page"
+              },
+              {
+                "key": "DATE_INSCRIPTION",
+                "value": "={{ $now.format('YYYY-MM-DD') }}"
+              }
+            ]
+          },
+          "updateEnabled": true
+        }
+      },
+      "id": "brevo-create-lead",
+      "name": "📧 Brevo - Créer Contact Lead",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [920, 320],
+      "credentials": {
+        "brevoApi": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
+          "name": "Brevo API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendTransacEmail",
+        "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
+        "subject": "🎁 Votre Guide IA Mandataire 2026",
+        "additionalFields": {
+          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO (EMAIL CADEAU PDF) ===",
+          "params": {
+            "parameter": [
+              {
+                "key": "download_url",
+                "value": "https://rentrerdesmandats.fr/downloads/lead-magnet-v3.pdf"
+              }
+            ]
+          },
+          "senderEmail": "contact@rentrerdesmandats.fr",
+          "senderName": "RentrerDesMandats"
+        }
+      },
+      "id": "brevo-send-pdf",
+      "name": "📨 Brevo - Envoyer PDF Gratuit",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [1180, 320],
+      "credentials": {
+        "brevoApi": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
+          "name": "Brevo API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Lead enregistré' }) }}",
+        "options": {}
+      },
+      "id": "respond-landing",
+      "name": "✅ Répondre OK Landing",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1440, 240]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraction données Stripe\nconst stripeData = $input.item.json.body.data.object;\n\nreturn {\n  email: stripeData.customer_details?.email || stripeData.customer_email,\n  name: stripeData.customer_details?.name || '',\n  amount: (stripeData.amount_total / 100).toFixed(2),\n  currency: stripeData.currency?.toUpperCase() || 'EUR',\n  payment_id: stripeData.id,\n  payment_status: stripeData.payment_status,\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "extract-stripe-data",
+      "name": "🔧 Extraire Données Stripe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1140, 480]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Prospects",
+          "mode": "list"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $json.email }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Statut": "CLIENT",
+            "Date_Achat": "={{ $now.format('YYYY-MM-DD HH:mm:ss') }}",
+            "Montant": "={{ $json.amount }}€",
+            "Payment_ID": "={{ $json.payment_id }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "gsheet-update-client",
+      "name": "📊 GSheet - Passer en CLIENT",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.1,
+      "position": [1400, 400],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
+          "name": "Google Sheets Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
+        "additionalFields": {
+          "listIds": ["=== LIST ID BREVO 'CLIENTS' ==="],
+          "unlinkListIds": ["=== LIST ID BREVO 'LEADS LANDING PAGE' ==="],
+          "attributes": {
+            "attribute": [
+              {
+                "key": "DATE_ACHAT",
+                "value": "={{ $now.format('YYYY-MM-DD') }}"
+              },
+              {
+                "key": "MONTANT_ACHAT",
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.amount }}"
+              },
+              {
+                "key": "STATUT",
+                "value": "CLIENT"
+              }
+            ]
+          }
+        }
+      },
+      "id": "brevo-update-client",
+      "name": "📧 Brevo - Migrer vers Clients",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [1400, 560],
+      "credentials": {
+        "brevoApi": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
+          "name": "Brevo API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendTransacEmail",
+        "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
+        "subject": "🎉 Votre Kit Mandataire 2026 PRO est prêt !",
+        "additionalFields": {
+          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO (EMAIL LIVRAISON KIT) ===",
+          "params": {
+            "parameter": [
+              {
+                "key": "download_url",
+                "value": "https://rentrerdesmandats.fr/downloads/Kit_Mandataire_2026_PRO.zip"
+              },
+              {
+                "key": "prenom",
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] || 'là' }}"
+              }
+            ]
+          },
+          "senderEmail": "contact@rentrerdesmandats.fr",
+          "senderName": "RentrerDesMandats"
+        }
+      },
+      "id": "brevo-send-kit",
+      "name": "📨 Brevo - Livrer Kit ZIP",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [1660, 560],
+      "credentials": {
+        "brevoApi": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
+          "name": "Brevo API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ received: true }) }}",
+        "options": {}
+      },
+      "id": "respond-stripe-success",
+      "name": "✅ Répondre OK Stripe",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1920, 560]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ received: true, ignored: true }) }}",
+        "options": {}
+      },
+      "id": "respond-stripe-ignored",
+      "name": "⏭️ Répondre OK (Event Ignoré)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1140, 720]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hasError"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "error-handler-landing",
+      "name": "⚠️ Error Handler Landing",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1180, 80]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { error: 'Erreur lors du traitement du lead', details: $json, timestamp: $now.toISO() } }}",
+        "options": {}
+      },
+      "id": "log-error-landing",
+      "name": "📝 Log Erreur Landing",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1440, 80]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hasError"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "error-handler-stripe",
+      "name": "⚠️ Error Handler Stripe",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1660, 720]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { error: 'Erreur lors du traitement Stripe', details: $json, timestamp: $now.toISO() } }}",
+        "options": {}
+      },
+      "id": "log-error-stripe",
+      "name": "📝 Log Erreur Stripe",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1920, 720]
+    }
+  ],
+  "connections": {
+    "🔗 Webhook Landing Page": {
+      "main": [
+        [
+          {
+            "node": "📊 GSheet - Ajouter Lead",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📧 Brevo - Créer Contact Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📧 Brevo - Créer Contact Lead": {
+      "main": [
+        [
+          {
+            "node": "📨 Brevo - Envoyer PDF Gratuit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📨 Brevo - Envoyer PDF Gratuit": {
+      "main": [
+        [
+          {
+            "node": "⚠️ Error Handler Landing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚠️ Error Handler Landing": {
+      "main": [
+        [
+          {
+            "node": "📝 Log Erreur Landing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "✅ Répondre OK Landing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📝 Log Erreur Landing": {
+      "main": [
+        [
+          {
+            "node": "✅ Répondre OK Landing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "💳 Webhook Stripe": {
+      "main": [
+        [
+          {
+            "node": "✅ IF Checkout Completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "✅ IF Checkout Completed": {
+      "main": [
+        [
+          {
+            "node": "🔧 Extraire Données Stripe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "⏭️ Répondre OK (Event Ignoré)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔧 Extraire Données Stripe": {
+      "main": [
+        [
+          {
+            "node": "📊 GSheet - Passer en CLIENT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📧 Brevo - Migrer vers Clients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📧 Brevo - Migrer vers Clients": {
+      "main": [
+        [
+          {
+            "node": "📨 Brevo - Livrer Kit ZIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📨 Brevo - Livrer Kit ZIP": {
+      "main": [
+        [
+          {
+            "node": "⚠️ Error Handler Stripe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚠️ Error Handler Stripe": {
+      "main": [
+        [
+          {
+            "node": "📝 Log Erreur Stripe",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "✅ Répondre OK Stripe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📝 Log Erreur Stripe": {
+      "main": [
+        [
+          {
+            "node": "✅ Répondre OK Stripe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 GSheet - Ajouter Lead": {
+      "main": [[]]
+    },
+    "📊 GSheet - Passer en CLIENT": {
+      "main": [[]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-01-30T00:00:00.000Z",
+      "updatedAt": "2026-01-30T00:00:00.000Z",
+      "id": "rdm-hub",
+      "name": "RentrerDesMandats"
+    }
+  ],
+  "triggerCount": 2,
+  "updatedAt": "2026-01-30T00:00:00.000Z",
+  "versionId": "production-v1.0"
+}

@@ -1,0 +1,507 @@
+{
+  "name": "🎯 WORKFLOW B - LE CHASSEUR DE LEADS V2 (Produit Upsell + Usage Interne)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🎯 LE CHASSEUR DE LEADS V2.0\n### 💰 CONFIGURATION FREE TIER APIFY (≤5$/mois)\n\n**⚠️ IMPORTANT - LIMITES PAR DÉFAUT :**\n✅ `maxCrawledPlacesPerSearch`: **50** (Mode Test)\n✅ `maxImages`: **0** (Économie)\n✅ `maxReviews`: **0** (Économie)\n\n**📈 Pour scraper plus (après validation) :**\n- Augmentez `maxCrawledPlacesPerSearch` à 200-500\n- Monitoring Apify: https://console.apify.com/billing\n\n**🔧 À CONFIGURER :**\n1. Créer compte Apify (gratuit)\n2. Copier votre API Key dans Credentials\n3. Créer Google Sheet avec colonnes (voir ci-dessous)\n4. Modifier les mots-clés de recherche\n\n**📊 Colonnes Google Sheet requises :**\n`Prénom | Nom | Email | Téléphone | Réseau | Ville | Département | Code Postal | Note Google | Nb Avis | Site Web | Score | Niveau | URL Google | Date Scraping | Statut`",
+        "height": 500,
+        "width": 520
+      },
+      "id": "sticky-intro",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 100]
+    },
+    {
+      "parameters": {},
+      "id": "trigger-manual",
+      "name": "▶️ Démarrer Scraping",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ MODIFIER ICI VOS MOTS-CLÉS\n\n**Exemples de recherches :**\n- `\"agent immobilier Paris\"`\n- `\"mandataire IAD Lyon\"`\n- `\"conseiller Safti Marseille\"`\n\n**💡 Astuce :**\nCiblez une ville à la fois pour\ndes résultats plus précis.\n\n**🔢 Augmenter le volume :**\nChangez `maxCrawledPlacesPerSearch`\nà 200 (coût ~2-3$/run)",
+        "height": 320,
+        "width": 360
+      },
+      "id": "sticky-config",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [760, 480]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"searchStringsArray\": [\n    \"agent immobilier Lyon\",\n    \"mandataire immobilier Lyon\"\n  ],\n  \"maxCrawledPlacesPerSearch\": 50,\n  \"language\": \"fr\",\n  \"skipClosedPlaces\": true,\n  \"maxImages\": 0,\n  \"maxReviews\": 0,\n  \"oneReviewPerPlace\": false,\n  \"scrapeContactInfo\": true,\n  \"additionalInfo\": true,\n  \"proxyConfiguration\": {\n    \"useApifyProxy\": true\n  }\n}",
+        "options": {}
+      },
+      "id": "set-apify-config",
+      "name": "⚙️ Config Apify (FREE TIER)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1000, 300]
+    },
+    {
+      "parameters": {
+        "content": "## 🔑 CLÉ API APIFY\n\n**Où la trouver ?**\n1. Allez sur https://console.apify.com\n2. Settings → Integrations\n3. Copiez votre \"Personal API Token\"\n\n**Comment l'ajouter ?**\n1. Dans n8n: Credentials\n2. Nouveau → HTTP Header Auth\n3. Name: `Authorization`\n4. Value: `Bearer VOTRE_CLE_API`",
+        "height": 280,
+        "width": 340
+      },
+      "id": "sticky-api-key",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1180, 60]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/compass~google-maps-scraper/runs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $credentials.apiKey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "apify-launch",
+      "name": "🚀 Lancer Apify Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1280, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "name": "Apify API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 45,
+        "unit": "seconds"
+      },
+      "id": "wait-initial",
+      "name": "⏳ Attendre 45s (Scraping)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1520, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.apify.com/v2/acts/compass~google-maps-scraper/runs/{{ $('🚀 Lancer Apify Scraper').item.json.data.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $credentials.apiKey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "check-status",
+      "name": "🔍 Vérifier Statut",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1760, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "name": "Apify API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "status-running",
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "RUNNING",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-still-running",
+      "name": "🔄 Encore en cours?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "wait-loop",
+      "name": "⏳ Attendre 30s (Loop)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2240, 180]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.apify.com/v2/acts/compass~google-maps-scraper/runs/{{ $('🚀 Lancer Apify Scraper').item.json.data.id }}/dataset/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{ $credentials.apiKey }}"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-results",
+      "name": "📥 Récupérer Résultats",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2240, 420],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "name": "Apify API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 ENRICHISSEMENT AUTOMATIQUE\n\n**Ce script fait quoi ?**\n✅ Nettoie les noms (retire \"mandataire\", \"agent\"...)\n✅ Détecte le réseau (IAD, Safti, Optimhome...)\n✅ Génère l'email pro (ex: john.doe@iad-france.fr)\n✅ Attribue un score qualité A/B/C/D\n\n**Résultats :**\n- **Niveau A** (≥70%) = Email + Réseau + Téléphone\n- **Niveau B** (≥50%) = Email + Réseau OU Téléphone\n- **Niveau C** (≥30%) = Réseau détecté\n- **Niveau D** (<30%) = Données incomplètes",
+        "height": 340,
+        "width": 400
+      },
+      "id": "sticky-enrichissement",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2440, 60]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================================\n// SCRIPT D'ENRICHISSEMENT LEADS - \"LE CERVEAU DU CHASSEUR\"\n// Version: 2.0 Optimisée\n// ============================================================================\n\nconst RESEAUX_MANDATAIRES = [\n  { nom: \"IAD France\", slug: \"iad\", domaine: \"iad-france.fr\", patterns: [\"iad france\", \"iad-france\", \"conseiller iad\", \"agent iad\", \"mandataire iad\", \"iad \"] },\n  { nom: \"Safti\", slug: \"safti\", domaine: \"safti.fr\", patterns: [\"safti\", \"conseiller safti\", \"agent safti\"] },\n  { nom: \"Capifrance\", slug: \"capifrance\", domaine: \"capifrance.fr\", patterns: [\"capifrance\", \"capi france\", \"conseiller capifrance\"] },\n  { nom: \"Optimhome\", slug: \"optimhome\", domaine: \"optimhome.com\", patterns: [\"optimhome\", \"optim home\", \"conseiller optimhome\"] },\n  { nom: \"BSK Immobilier\", slug: \"bsk\", domaine: \"bsk-immobilier.com\", patterns: [\"bsk immobilier\", \"bsk-immobilier\", \"conseiller bsk\"] },\n  { nom: \"MegAgence\", slug: \"megagence\", domaine: \"megagence.com\", patterns: [\"megagence\", \"mega agence\", \"conseiller megagence\"] },\n  { nom: \"EffiCity\", slug: \"efficity\", domaine: \"efficity.com\", patterns: [\"efficity\", \"effi city\", \"conseiller efficity\"] },\n  { nom: \"Proprietes-Privees\", slug: \"proprietes-privees\", domaine: \"proprietes-privees.com\", patterns: [\"proprietes privees\", \"propriétés privées\", \"proprietes-privees\"] },\n  { nom: \"Keller Williams\", slug: \"kw\", domaine: \"kwfrance.com\", patterns: [\"keller williams\", \"kw france\", \"agent kw\"] },\n  { nom: \"Sextant France\", slug: \"sextant\", domaine: \"sextantfrance.fr\", patterns: [\"sextant france\", \"sextant\"] },\n  { nom: \"3G Immo\", slug: \"3gimmo\", domaine: \"3gimmo-consultant.com\", patterns: [\"3g immo\", \"3gimmo\", \"conseiller 3g\"] },\n  { nom: \"Immo Reseau\", slug: \"immoreseau\", domaine: \"immo-reseau.fr\", patterns: [\"immo reseau\", \"immo-reseau\", \"immoreseau\"] },\n  { nom: \"Weelodge\", slug: \"weelodge\", domaine: \"weelodge.com\", patterns: [\"weelodge\", \"wee lodge\"] },\n  { nom: \"Dr House Immo\", slug: \"drhouse\", domaine: \"dr-house-immo.fr\", patterns: [\"dr house\", \"dr-house\", \"drhouse\"] },\n  { nom: \"Arthurimmo\", slug: \"arthurimmo\", domaine: \"arthurimmo.com\", patterns: [\"arthurimmo\", \"arthur immo\"] },\n  { nom: \"Ledil Immobilier\", slug: \"ledil\", domaine: \"ledil.immo\", patterns: [\"ledil\", \"le dil\", \"ledil immobilier\"] },\n  { nom: \"Expertimo\", slug: \"expertimo\", domaine: \"expertimo.com\", patterns: [\"expertimo\", \"expert imo\"] },\n  { nom: \"Swixim\", slug: \"swixim\", domaine: \"swixim.fr\", patterns: [\"swixim\"] },\n  { nom: \"Cimm Immobilier\", slug: \"cimm\", domaine: \"cimm.com\", patterns: [\"cimm immobilier\", \"cimm\"] },\n  { nom: \"Nestenn\", slug: \"nestenn\", domaine: \"nestenn.com\", patterns: [\"nestenn\"] }\n];\n\nconst MOTS_A_SUPPRIMER = [\n  \"mandataire\", \"mandataires\", \"agent\", \"agents\", \"conseiller\", \"conseillers\",\n  \"consultant\", \"consultants\", \"négociateur\", \"négociateurs\", \"commercial\", \"commerciaux\",\n  \"expert\", \"experts\", \"spécialiste\", \"spécialistes\",\n  \"immobilier\", \"immobilière\", \"immobiliers\", \"immo\", \"real estate\",\n  \"transaction\", \"transactions\", \"vente\", \"ventes\", \"location\", \"locations\",\n  \"gestion\", \"patrimoine\", \"investissement\",\n  \"indépendant\", \"indépendante\", \"indépendants\", \"freelance\",\n  \"professionnel\", \"professionnelle\", \"professionnels\"\n];\n\nconst VILLES_FRANCAISES = [\n  \"paris\", \"marseille\", \"lyon\", \"toulouse\", \"nice\", \"nantes\", \"strasbourg\",\n  \"montpellier\", \"bordeaux\", \"lille\", \"rennes\", \"reims\", \"le havre\", \"saint-étienne\",\n  \"toulon\", \"grenoble\", \"dijon\", \"angers\", \"nîmes\", \"villeurbanne\", \"clermont-ferrand\",\n  \"le mans\", \"aix-en-provence\", \"brest\", \"tours\", \"amiens\", \"limoges\", \"annecy\",\n  \"perpignan\", \"boulogne-billancourt\", \"metz\", \"besançon\", \"orléans\", \"rouen\",\n  \"mulhouse\", \"caen\", \"nancy\", \"saint-denis\", \"argenteuil\", \"montreuil\"\n];\n\nfunction normaliser(str) {\n  if (!str) return \"\";\n  return str.toLowerCase().normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").replace(/œ/g, \"oe\").replace(/æ/g, \"ae\").trim();\n}\n\nfunction supprimerEmojis(str) {\n  if (!str) return \"\";\n  return str.replace(/[\\u{1F600}-\\u{1F64F}]|[\\u{1F300}-\\u{1F5FF}]|[\\u{1F680}-\\u{1F6FF}]|[\\u{1F1E0}-\\u{1F1FF}]|[\\u{2600}-\\u{26FF}]|[\\u{2700}-\\u{27BF}]/gu, \"\").trim();\n}\n\nfunction detecterReseau(titre, description = \"\", website = \"\") {\n  const texteComplet = normaliser(`${titre} ${description} ${website}`);\n  for (const reseau of RESEAUX_MANDATAIRES) {\n    for (const pattern of reseau.patterns) {\n      if (texteComplet.includes(normaliser(pattern))) {\n        return { detecte: true, nom: reseau.nom, slug: reseau.slug, domaine: reseau.domaine };\n      }\n    }\n  }\n  return { detecte: false, nom: null, slug: null, domaine: null };\n}\n\nfunction extraireIdentite(titreOriginal, villeGoogleMaps = \"\") {\n  let titre = supprimerEmojis(titreOriginal || \"\");\n  titre = titre.replace(/[|•·●○◦▪▫►◄★☆✓✔✗✘→←↑↓↔↕]/g, \" \").replace(/[-–—]{2,}/g, \" \").replace(/[()[\\]{}]/g, \" \");\n  \n  let titreNormalise = normaliser(titre);\n  for (const mot of MOTS_A_SUPPRIMER) {\n    const regex = new RegExp(`\\\\b${normaliser(mot)}\\\\b`, \"gi\");\n    titreNormalise = titreNormalise.replace(regex, \" \");\n    titre = titre.replace(new RegExp(`\\\\b${mot}\\\\b`, \"gi\"), \" \");\n  }\n  \n  if (villeGoogleMaps) titre = titre.replace(new RegExp(`\\\\b${villeGoogleMaps}\\\\b`, \"gi\"), \" \");\n  for (const ville of VILLES_FRANCAISES) titre = titre.replace(new RegExp(`\\\\b${ville}\\\\b`, \"gi\"), \" \");\n  \n  titre = titre.replace(/\\b\\d{5}\\b/g, \" \").replace(/\\b\\d{2,4}\\b/g, \" \").replace(/\\s+/g, \" \").trim();\n  \n  const mots = titre.split(\" \").filter(m => m.length >= 2);\n  let prenom = \"\", nom = \"\";\n  \n  if (mots.length >= 2) {\n    prenom = mots[0].charAt(0).toUpperCase() + mots[0].slice(1).toLowerCase();\n    nom = mots.slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(\" \");\n  } else if (mots.length === 1) {\n    prenom = mots[0].charAt(0).toUpperCase() + mots[0].slice(1).toLowerCase();\n  }\n  \n  let confiance = 0;\n  if (prenom && prenom.length >= 2) confiance += 30;\n  if (nom && nom.length >= 2) confiance += 30;\n  if (prenom && /^[A-Za-zÀ-ÿ-]+$/.test(prenom) && prenom.length <= 15) confiance += 20;\n  if (nom && /^[A-Za-zÀ-ÿ-\\s]+$/.test(nom) && nom.length <= 25) confiance += 20;\n  \n  return { prenom, nom, nom_complet: [prenom, nom].filter(Boolean).join(\" \"), titre_nettoye: titre, confiance: Math.min(confiance, 100) };\n}\n\nfunction genererEmail(prenom, nom, reseau) {\n  if (!reseau.detecte || !reseau.domaine || !prenom || !nom) {\n    return { email: null, methode: \"non_generable\", confiance: 0 };\n  }\n  const prenomEmail = normaliser(prenom).replace(/\\s+/g, \"\").replace(/-/g, \"\");\n  const nomEmail = normaliser(nom).replace(/\\s+/g, \"\").replace(/-/g, \"\");\n  return { email: `${prenomEmail}.${nomEmail}@${reseau.domaine}`, methode: \"pattern_matching\", confiance: 75 };\n}\n\nfunction scorerLead(item, identite, reseau, emailGenere) {\n  let score = 0;\n  if (reseau.detecte) score += 25;\n  if (emailGenere.email) score += 25;\n  if (item.phone || item.phoneUnformatted) score += 15;\n  if (item.website) score += 10;\n  score += Math.floor(identite.confiance * 0.15);\n  if (item.reviewsCount) score += Math.min(Math.floor(item.reviewsCount / 5), 10);\n  if (item.totalScore && item.totalScore >= 4) score += 5;\n  return { score: Math.min(score, 100), niveau: score >= 70 ? \"A\" : score >= 50 ? \"B\" : score >= 30 ? \"C\" : \"D\" };\n}\n\nfunction extraireDepartement(codePostal) {\n  if (!codePostal) return \"\";\n  const cp = codePostal.toString().padStart(5, \"0\");\n  if (cp.startsWith(\"20\")) {\n    const num = parseInt(cp.substring(0, 3));\n    if (num >= 200 && num <= 201) return \"2A\";\n    if (num >= 202 && num <= 209) return \"2B\";\n  }\n  if (cp.startsWith(\"97\") || cp.startsWith(\"98\")) return cp.substring(0, 3);\n  return cp.substring(0, 2);\n}\n\n// TRAITEMENT PRINCIPAL\nconst items = $input.all();\nconst resultats = [];\n\nfor (const item of items) {\n  try {\n    const data = item.json;\n    const reseau = detecterReseau(data.title, data.description || \"\", data.website || \"\");\n    const identite = extraireIdentite(data.title, data.city || data.neighborhood || \"\");\n    const emailGenere = genererEmail(identite.prenom, identite.nom, reseau);\n    const qualite = scorerLead(data, identite, reseau, emailGenere);\n    \n    if (emailGenere.email || data.phone || data.phoneUnformatted || reseau.detecte) {\n      resultats.push({\n        json: {\n          prenom: identite.prenom,\n          nom: identite.nom,\n          nom_complet: identite.nom_complet,\n          email: emailGenere.email,\n          email_confiance: emailGenere.confiance,\n          telephone: data.phone || data.phoneUnformatted || null,\n          reseau_nom: reseau.nom,\n          ville: data.city || data.neighborhood || \"\",\n          adresse: data.address || \"\",\n          departement: extraireDepartement(data.postalCode),\n          code_postal: data.postalCode || \"\",\n          titre_original: data.title,\n          note_google: data.totalScore || null,\n          nb_avis: data.reviewsCount || 0,\n          website: data.website || \"\",\n          url_google: data.url || \"\",\n          score_qualite: qualite.score,\n          niveau_qualite: qualite.niveau,\n          date_scraping: new Date().toISOString(),\n          statut: \"NOUVEAU\"\n        }\n      });\n    }\n  } catch (error) {\n    console.error(`Erreur enrichissement: ${error.message}`);\n  }\n}\n\nreturn resultats;"
+      },
+      "id": "enrichir-leads",
+      "name": "🧠 Enrichir Leads (Pattern Matching)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2480, 420]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "filter-quality",
+              "leftValue": "={{ $json.score_qualite }}",
+              "rightValue": 30,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "filter-quality",
+      "name": "🎯 Filtre Qualité ≥ C (Score ≥30)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2720, 420]
+    },
+    {
+      "parameters": {
+        "content": "## 📊 GOOGLE SHEETS\n\n**Structure exacte :**\nCréez un onglet nommé **\"Chasse\"**\navec ces colonnes (dans l'ordre) :\n\n1. Prénom\n2. Nom\n3. Email\n4. Téléphone\n5. Réseau\n6. Ville\n7. Département\n8. Code Postal\n9. Note Google\n10. Nb Avis\n11. Site Web\n12. Score\n13. Niveau\n14. URL Google\n15. Date Scraping\n16. Statut\n\n**⚠️ Important :** Les noms doivent être\nexactement comme ci-dessus (accents inclus).",
+        "height": 440,
+        "width": 360
+      },
+      "id": "sticky-gsheet",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2900, 60]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Chasse",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Prénom": "={{ $json.prenom }}",
+            "Nom": "={{ $json.nom }}",
+            "Email": "={{ $json.email }}",
+            "Téléphone": "={{ $json.telephone }}",
+            "Réseau": "={{ $json.reseau_nom }}",
+            "Ville": "={{ $json.ville }}",
+            "Département": "={{ $json.departement }}",
+            "Code Postal": "={{ $json.code_postal }}",
+            "Note Google": "={{ $json.note_google }}",
+            "Nb Avis": "={{ $json.nb_avis }}",
+            "Site Web": "={{ $json.website }}",
+            "Score": "={{ $json.score_qualite }}",
+            "Niveau": "={{ $json.niveau_qualite }}",
+            "URL Google": "={{ $json.url_google }}",
+            "Date Scraping": "={{ $json.date_scraping }}",
+            "Statut": "={{ $json.statut }}"
+          },
+          "matchingColumns": ["Email"],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "gsheet-append",
+      "name": "📊 Ajouter à Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "position": [2960, 320],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
+          "name": "Google Sheets Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "aggregate-all",
+      "name": "📈 Agréger Tout",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [3200, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst data = items[0].json.data || [];\n\nconst stats = {\n  total_leads: data.length,\n  leads_A: data.filter(d => d.niveau_qualite === 'A').length,\n  leads_B: data.filter(d => d.niveau_qualite === 'B').length,\n  leads_C: data.filter(d => d.niveau_qualite === 'C').length,\n  avec_email: data.filter(d => d.email).length,\n  avec_telephone: data.filter(d => d.telephone).length,\n  reseaux: [...new Set(data.filter(d => d.reseau_nom).map(d => d.reseau_nom))],\n  villes: [...new Set(data.map(d => d.ville).filter(Boolean))],\n  date_run: new Date().toISOString()\n};\n\nreturn [{ json: stats }];"
+      },
+      "id": "stats-finale",
+      "name": "📊 Statistiques Finales",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3440, 320]
+    }
+  ],
+  "connections": {
+    "▶️ Démarrer Scraping": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Config Apify (FREE TIER)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Config Apify (FREE TIER)": {
+      "main": [
+        [
+          {
+            "node": "🚀 Lancer Apify Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🚀 Lancer Apify Scraper": {
+      "main": [
+        [
+          {
+            "node": "⏳ Attendre 45s (Scraping)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⏳ Attendre 45s (Scraping)": {
+      "main": [
+        [
+          {
+            "node": "🔍 Vérifier Statut",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔍 Vérifier Statut": {
+      "main": [
+        [
+          {
+            "node": "🔄 Encore en cours?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔄 Encore en cours?": {
+      "main": [
+        [
+          {
+            "node": "⏳ Attendre 30s (Loop)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📥 Récupérer Résultats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⏳ Attendre 30s (Loop)": {
+      "main": [
+        [
+          {
+            "node": "🔍 Vérifier Statut",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📥 Récupérer Résultats": {
+      "main": [
+        [
+          {
+            "node": "🧠 Enrichir Leads (Pattern Matching)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🧠 Enrichir Leads (Pattern Matching)": {
+      "main": [
+        [
+          {
+            "node": "🎯 Filtre Qualité ≥ C (Score ≥30)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🎯 Filtre Qualité ≥ C (Score ≥30)": {
+      "main": [
+        [
+          {
+            "node": "📊 Ajouter à Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "📊 Ajouter à Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "📈 Agréger Tout",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📈 Agréger Tout": {
+      "main": [
+        [
+          {
+            "node": "📊 Statistiques Finales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-01-30T00:00:00.000Z",
+      "updatedAt": "2026-01-30T00:00:00.000Z",
+      "id": "chasseur-v2",
+      "name": "Produit-Upsell"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2026-01-30T00:00:00.000Z",
+  "versionId": "upsell-v2.0",
+  "meta": {
+    "productType": "upsell",
+    "price": "97€",
+    "description": "Workflow de scraping Google Maps + enrichissement automatique pour générer des leads agents immobiliers qualifiés"
+  }
+}

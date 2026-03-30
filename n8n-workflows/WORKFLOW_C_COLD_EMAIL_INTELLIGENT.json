@@ -1,0 +1,457 @@
+{
+  "name": "📧 WORKFLOW C - COLD EMAIL INTELLIGENT (Séquence Anti-Spam)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 📧 COLD EMAIL INTELLIGENT\n\n**Ce workflow envoie :**\n- Des emails de prospection automatisés\n- Par paquets de 10 (évite le spam)\n- Avec délais aléatoires 2-5min\n- Lecture depuis Google Sheets\n\n**⚠️ SÉCURITÉ ANTI-BLACKLIST :**\n✅ Max 10 emails/paquet\n✅ Délai aléatoire entre chaque\n✅ Envoi uniquement statut \"A_CONTACTER\"\n✅ Update automatique → \"CONTACTÉ\"\n\n**📅 PROGRAMMATION :**\nExécution automatique chaque matin à 9h00\n(modifiable dans le node Schedule)\n\n**🔧 À CONFIGURER :**\n1. Credentials Brevo\n2. Google Sheet ID\n3. Template Email Brevo\n4. Vérifier le domaine d'envoi",
+        "height": 480,
+        "width": 480
+      },
+      "id": "sticky-intro",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 100]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "⏰ Trigger - Chaque matin 9h (Lun-Ven)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "content": "## ⏰ PROGRAMMATION\n\n**Expression Cron actuelle :**\n`0 9 * * 1-5`\n= Tous les jours à 9h00\n  du lundi au vendredi\n\n**Modifier l'heure ?**\n- 8h00 : `0 8 * * 1-5`\n- 10h30 : `30 10 * * 1-5`\n- 14h00 : `0 14 * * 1-5`\n\n**Désactiver le schedule ?**\nUtilisez le toggle en haut\ndu workflow pour tester\nmanuellement d'abord.",
+        "height": 320,
+        "width": 340
+      },
+      "id": "sticky-schedule",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [680, 640]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Chasse",
+          "mode": "list"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Statut",
+              "lookupValue": "A_CONTACTER"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": true
+        }
+      },
+      "id": "gsheet-read-leads",
+      "name": "📊 GSheet - Lire Leads A_CONTACTER",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [980, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
+          "name": "Google Sheets Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 📊 STATUTS GOOGLE SHEETS\n\n**Logique de statuts :**\n\n🆕 **NOUVEAU**\n→ Lead vient d'être scrapé\n   (créé par Workflow B)\n\n✅ **A_CONTACTER**\n→ Lead qualifié et prêt\n   (vous le changez manuellement)\n\n📧 **CONTACTÉ**\n→ Email envoyé par ce workflow\n   (changé automatiquement)\n\n💬 **EN_DISCUSSION**\n→ Le lead a répondu\n   (vous le changez manuellement)\n\n🎯 **CONVERTI**\n→ Le lead est devenu client\n   (vous le changez manuellement)\n\n❌ **EXCLU**\n→ Lead non pertinent\n   (vous le changez manuellement)",
+        "height": 480,
+        "width": 380
+      },
+      "id": "sticky-statuts",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1200, 620]
+    },
+    {
+      "parameters": {
+        "batchSize": 10,
+        "options": {}
+      },
+      "id": "split-batches",
+      "name": "📦 Split en Paquets de 10",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1240, 300]
+    },
+    {
+      "parameters": {
+        "content": "## 🔐 ANTI-SPAM SYSTEM\n\n**Pourquoi des paquets de 10 ?**\nLes serveurs mail détectent les\nenvois massifs. En limitant à 10\nemails par cycle, on reste sous\nles radars.\n\n**Délai aléatoire 2-5min :**\nÉvite la détection de patterns\nautomatiques. Un humain ne peut\npas envoyer exactement toutes\nles 3 minutes.\n\n**Bonne pratique :**\nNe jamais dépasser 50-100 emails/jour\ndepuis le même domaine d'envoi.\n\n**Si blacklisté ?**\nVérifiez sur https://mxtoolbox.com\net utilisez un domaine différent\npour la prospection (.com vs .fr).",
+        "height": 420,
+        "width": 400
+      },
+      "id": "sticky-antispam",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1440, 620]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Générer un délai aléatoire entre 2 et 5 minutes\nconst minSeconds = 120; // 2 minutes\nconst maxSeconds = 300; // 5 minutes\n\nconst randomDelay = Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;\n\nreturn {\n  json: {\n    delay_seconds: randomDelay,\n    delay_minutes: (randomDelay / 60).toFixed(2),\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "generate-random-delay",
+      "name": "🎲 Générer Délai Aléatoire",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1500, 300]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('🎲 Générer Délai Aléatoire').item.json.delay_seconds }}",
+        "unit": "seconds"
+      },
+      "id": "wait-random",
+      "name": "⏳ Attendre (2-5min Aléatoire)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1760, 300]
+    },
+    {
+      "parameters": {
+        "content": "## 📨 TEMPLATE BREVO\n\n**Variables disponibles :**\n\n`{{ params.prenom }}` → Prénom du lead\n`{{ params.nom }}` → Nom du lead\n`{{ params.reseau }}` → Réseau (IAD, Safti...)\n`{{ params.ville }}` → Ville du lead\n\n**Exemple de template :**\n\n```\nBonjour {{ params.prenom }},\n\nJe m'adresse aux conseillers\n{{ params.reseau }} de {{ params.ville }}\npour leur présenter notre solution...\n\n[...]\n\nCordialement,\nAntoine\n```\n\n**⚠️ À créer dans Brevo :**\n1. Campaigns → Templates\n2. Créer un template transactionnel\n3. Copier l'ID du template",
+        "height": 460,
+        "width": 400
+      },
+      "id": "sticky-template",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1940, 620]
+    },
+    {
+      "parameters": {
+        "operation": "sendTransacEmail",
+        "email": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Email }}",
+        "subject": "Solution IA pour Mandataires - Loi 11 Août 2026",
+        "additionalFields": {
+          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO ===",
+          "params": {
+            "parameter": [
+              {
+                "key": "prenom",
+                "value": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Prénom || 'là' }}"
+              },
+              {
+                "key": "nom",
+                "value": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Nom || '' }}"
+              },
+              {
+                "key": "reseau",
+                "value": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Réseau || 'votre réseau' }}"
+              },
+              {
+                "key": "ville",
+                "value": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Ville || 'votre secteur' }}"
+              }
+            ]
+          },
+          "senderEmail": "contact@rentrerdesmandats.com",
+          "senderName": "Antoine - RentrerDesMandats"
+        }
+      },
+      "id": "brevo-send-email",
+      "name": "📨 Brevo - Envoyer Email",
+      "type": "n8n-nodes-base.brevo",
+      "typeVersion": 1,
+      "position": [2020, 300],
+      "credentials": {
+        "brevoApi": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
+          "name": "Brevo API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Chasse",
+          "mode": "list"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email",
+              "lookupValue": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Email }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Statut": "CONTACTÉ",
+            "Date_Contact": "={{ $now.format('YYYY-MM-DD HH:mm:ss') }}"
+          },
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "gsheet-update-status",
+      "name": "📊 GSheet - Passer en CONTACTÉ",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [2280, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
+          "name": "Google Sheets Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-more-batches",
+              "leftValue": "={{ $('📦 Split en Paquets de 10').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-more-batches",
+      "name": "🔄 Plus de paquets?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2540, 300]
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "minutes"
+      },
+      "id": "wait-between-batches",
+      "name": "⏳ Pause 10min entre paquets",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2800, 180]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "aggregate-final",
+      "name": "📊 Agréger Résultats",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [2800, 420]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst data = items[0].json.data || [];\n\nconst stats = {\n  total_envoyes: data.length,\n  premiere_execution: data[0]?.date_envoi || null,\n  derniere_execution: data[data.length - 1]?.date_envoi || null,\n  duree_totale_minutes: data.length > 0 ? \n    Math.round((new Date(data[data.length - 1].date_envoi) - new Date(data[0].date_envoi)) / 60000) : 0,\n  timestamp_fin: new Date().toISOString(),\n  status: 'SUCCESS'\n};\n\nreturn [{ json: stats }];"
+      },
+      "id": "stats-finale",
+      "name": "📈 Stats Finales",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3060, 420]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { date_envoi: $now.toISO(), email: $('📊 GSheet - Lire Leads A_CONTACTÉ').item.json.Email, prenom: $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Prénom } }}",
+        "options": {}
+      },
+      "id": "log-envoi",
+      "name": "📝 Log Envoi",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [2280, 480]
+    }
+  ],
+  "connections": {
+    "⏰ Trigger - Chaque matin 9h (Lun-Ven)": {
+      "main": [
+        [
+          {
+            "node": "📊 GSheet - Lire Leads A_CONTACTER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 GSheet - Lire Leads A_CONTACTER": {
+      "main": [
+        [
+          {
+            "node": "📦 Split en Paquets de 10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📦 Split en Paquets de 10": {
+      "main": [
+        [
+          {
+            "node": "🎲 Générer Délai Aléatoire",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🎲 Générer Délai Aléatoire": {
+      "main": [
+        [
+          {
+            "node": "⏳ Attendre (2-5min Aléatoire)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⏳ Attendre (2-5min Aléatoire)": {
+      "main": [
+        [
+          {
+            "node": "📨 Brevo - Envoyer Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📨 Brevo - Envoyer Email": {
+      "main": [
+        [
+          {
+            "node": "📊 GSheet - Passer en CONTACTÉ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📝 Log Envoi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 GSheet - Passer en CONTACTÉ": {
+      "main": [
+        [
+          {
+            "node": "🔄 Plus de paquets?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔄 Plus de paquets?": {
+      "main": [
+        [
+          {
+            "node": "⏳ Pause 10min entre paquets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📊 Agréger Résultats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⏳ Pause 10min entre paquets": {
+      "main": [
+        [
+          {
+            "node": "📦 Split en Paquets de 10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📊 Agréger Résultats": {
+      "main": [
+        [
+          {
+            "node": "📈 Stats Finales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📝 Log Envoi": {
+      "main": [[]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "executionTimeout": 3600,
+    "timezone": "Europe/Paris"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-01-30T00:00:00.000Z",
+      "updatedAt": "2026-01-30T00:00:00.000Z",
+      "id": "cold-email",
+      "name": "RentrerDesMandats"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-30T00:00:00.000Z",
+  "versionId": "production-v1.0"
+}

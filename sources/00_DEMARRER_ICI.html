@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Guide de Démarrage - Kit Mandataire 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* CONFIGURATION A4 & IMPRESSION */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        @media print {
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        /* STYLE GLOBAL TECH PREMIUM */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: #0A0E27; /* Bleu Nuit Profond */
+            color: #F8FAFC;
+            line-height: 1.5;
+        }
+
+        .page-container {
+            width: 21cm;
+            min-height: 29.7cm;
+            margin: 0 auto;
+            padding: 2cm;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, #0A0E27 0%, #111827 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* DÉCORATION D'ARRIÈRE-PLAN */
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(10, 14, 39, 0) 70%);
+            top: -200px;
+            right: -200px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* HEADER */
+        header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            font-size: 28pt;
+            font-weight: 800;
+            margin: 0;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        h1 span { color: #3B82F6; } /* Bleu Électrique */
+        .subtitle {
+            font-size: 14pt;
+            color: #94A3B8;
+            font-weight: 300;
+            margin-top: 5px;
+        }
+
+        /* CONTENU */
+        .intro-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .intro-text { font-size: 11pt; color: #CBD5E1; }
+
+        /* ARBORESCENCE */
+        h2 {
+            font-size: 16pt;
+            color: #3B82F6;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .folder-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .folder-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid #3B82F6;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        .folder-title { font-weight: 700; color: #fff; font-size: 12pt; display: block; margin-bottom: 4px; }
+        .folder-desc { font-size: 9pt; color: #94A3B8; }
+
+        /* INSTALLATION */
+        .step-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .step-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 15px;
+        }
+        .step-item::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            background: #3B82F6;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+        .step-title { font-weight: 700; color: #fff; font-size: 11pt; }
+        .step-text { font-size: 10pt; color: #CBD5E1; display: block; margin-top: 2px; }
+
+        /* ALERT BOX */
+        .alert-box {
+            background: rgba(245, 158, 11, 0.1); /* Orange warning */
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 9pt;
+            color: #FCD34D;
+        }
+        .alert-title { font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 5px; }
+
+        /* FOOTER */
+        .footer {
+            position: absolute;
+            bottom: 2cm;
+            left: 2cm;
+            right: 2cm;
+            text-align: center;
+            font-size: 9pt;
+            color: #475569;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        <div class="glow"></div>
+
+        <header>
+            <h1>Kit Mandataire <span>2026</span></h1>
+            <div class="subtitle">Guide de Démarrage Rapide & Installation</div>
+        </header>
+
+        <div class="intro-box">
+            <div class="intro-text">
+                <strong>Félicitations.</strong> Vous ne venez pas d'acheter de simples PDF, mais un système complet de conversion. 
+                Ce kit a été conçu pour une seule chose : vous faire signer des mandats là où les autres échouent, en utilisant la Loi 2026 et l'IA comme levier de confiance.
+                <br><br>
+                Suivez ce guide étape par étape pour configurer votre machine de guerre en moins de 15 minutes.
+            </div>
+        </div>
+
+        <h2>📂 Contenu de votre Kit</h2>
+        <div class="folder-grid">
+            <div class="folder-card">
+                <span class="folder-title">01_Assistants_IA</span>
+                <span class="folder-desc">Le Cerveau. Les 6 fichiers textes (Prompts) à copier dans ChatGPT.</span>
+            </div>
+            <div class="folder-card">
+                <span class="folder-title">02_Scripts_Appels</span>
+                <span class="folder-desc">La Parole. Ce que vous devez dire au téléphone pour convertir.</span>
+            </div>
+            <div class="folder-card">
+                <span class="folder-title">03_Sequences_CRM</span>
+                <span class="folder-desc">L'Écrit. Emails et SMS de relance pour ne jamais lâcher un lead.</span>
+            </div>
+            <div class="folder-card">
+                <span class="folder-title">04_Outils_Excel</span>
+                <span class="folder-desc">La Preuve. Calculateurs Prêt Relais, DPE et Tracker Consentement.</span>
+            </div>
+            <div class="folder-card">
+                <span class="folder-title">05_Presentation_Vendeur</span>
+                <span class="folder-desc">Le Visuel. Le PowerPoint "Tech" pour vos RDV d'estimation.</span>
+            </div>
+            <div class="folder-card">
+                <span class="folder-title">06_Tutoriels</span>
+                <span class="folder-desc">Le Mode d'emploi. Guides PDF et Checklists techniques.</span>
+            </div>
+        </div>
+
+        <h2>⚡ Installation des 6 Assistants IA</h2>
+        <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <ul class="step-list">
+                <li class="step-item">
+                    <span class="step-title">Ouvrez le dossier 01_Assistants_IA</span>
+                    <span class="step-text">Choisissez le premier fichier (ex: <i>01_Generateur_Consentement.txt</i>).</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">Allez sur ChatGPT (Version Plus recommandée)</span>
+                    <span class="step-text">Cliquez sur <b>Explorer les GPTs</b> > <b>Créer</b> (Create).</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">Copiez-Collez les données</span>
+                    <span class="step-text">Dans l'onglet <b>Configurer</b>, copiez le Nom, la Description et les Instructions exactes du fichier texte.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">Désactivez la navigation Web</span>
+                    <span class="step-text">Pour éviter les hallucinations, décochez "Web Browsing" sauf si indiqué.</span>
+                </li>
+                <li class="step-item">
+                    <span class="step-title">Sauvegardez en "Privé"</span>
+                    <span class="step-text">Cliquez sur <b>Créer/Mettre à jour</b> et choisissez <b>"Moi uniquement"</b>. Ces outils sont votre avantage concurrentiel, ne les partagez pas.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="alert-box">
+            <span class="alert-title">⚠️ AVERTISSEMENT JURIDIQUE IMPORTANT</span>
+            Ce kit fournit des modèles basés sur la législation en vigueur (Loi 2025-594, Réforme DPE 2026). Cependant, l'utilisateur reste seul responsable de l'utilisation finale des documents. Il est recommandé de vérifier les mises à jour légales locales. L'auteur du kit ne saurait être tenu responsable en cas de litige.
+        </div>
+
+        <div class="footer">
+            © 2026 Kit Mandataire Pro — Usage strictement personnel. Reproduction et revente interdites.
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Script d'Appel - Post Consentement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+        @media print { body { -webkit-print-color-adjust: exact; } }
+        body { margin: 0; padding: 0; font-family: 'Outfit', sans-serif; background: #fff; color: #0A0E27; }
+        
+        .header { background: #0A0E27; color: white; padding: 30px; text-align: center; border-bottom: 4px solid #3B82F6; }
+        h1 { margin: 0; font-size: 20pt; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { font-size: 10pt; color: #94A3B8; margin-top: 5px; }
+
+        .container { padding: 40px; max-width: 800px; margin: 0 auto; }
+        
+        .script-block { margin-bottom: 30px; border-left: 4px solid #CBD5E1; padding-left: 20px; }
+        .script-block.active { border-color: #3B82F6; background: #F8FAFC; padding: 20px; border-radius: 0 8px 8px 0; }
+        
+        .label { font-size: 9pt; font-weight: 800; color: #64748B; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .dialogue { font-size: 14pt; font-weight: 600; color: #0F172A; line-height: 1.4; }
+        .dialogue em { color: #3B82F6; font-style: normal; } /* Champs à remplir */
+        
+        .note { font-size: 10pt; color: #EF4444; font-style: italic; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Script Téléphonique</h1>
+        <div class="subtitle">Post-Consentement (Appel Légal)</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="script-block active">
+            <span class="label">1. Introduction (Le Brise-Glace)</span>
+            <div class="dialogue">
+                "Bonjour <em>[Prénom]</em>, c'est <em>[Votre Nom]</em>.<br>
+                On s'est échangé un message hier sur <em>[Site]</em> concernant votre bien à <em>[Ville]</em>.<br>
+                Vous m'aviez autorisé à vous rappeler — je vous dérange ?"
+            </div>
+            <div class="note">⚠️ Attendre impérativement le "Non, allez-y" avant de continuer.</div>
+        </div>
+
+        <div class="script-block active">
+            <span class="label">2. La Disqualification (Baisser la garde)</span>
+            <div class="dialogue">
+                "Super. Je vous rassure tout de suite : je ne vous appelle pas pour vous demander un mandat.<br>
+                Je voulais juste valider une info technique par rapport à la nouvelle Loi 2026 sur les DPE.<br>
+                Vous êtes chauffé à l'électricité ou au gaz ?"
+            </div>
+        </div>
+
+        <div class="script-block active">
+            <span class="label">3. Le Pivot (Créer le doute)</span>
+            <div class="dialogue">
+                "D'accord. C'est bien ce que je pensais.<br>
+                Avec la réforme du coefficient de conversion, votre note DPE a probablement changé automatiquement.<br>
+                Ça change totalement votre prix net vendeur.<br>
+                Vous l'avez fait recalculer récemment ?"
+            </div>
+        </div>
+
+        <div class="script-block active">
+            <span class="label">4. Le Closing (Vendre le RDV)</span>
+            <div class="dialogue">
+                "Écoutez, je passe dans votre quartier jeudi après-midi.<br>
+                Je peux passer 10 minutes (montre en main) pour vous donner la nouvelle note officielle.<br>
+                Ça ne vous engage à rien, mais au moins vous saurez si vous vendez au bon prix.<br>
+                Plutôt 14h ou 16h ?"
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

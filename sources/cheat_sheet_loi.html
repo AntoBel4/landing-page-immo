@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cheat Sheet Conformité 2026 - Print Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4 landscape; margin: 0; }
+        @media print { 
+            body { -webkit-print-color-adjust: exact; } 
+            .no-print { display: none; }
+        }
+
+        body {
+            margin: 0;
+            padding: 1.5cm;
+            font-family: 'Outfit', sans-serif;
+            background-color: #FFFFFF; /* Fond Blanc pour impression */
+            color: #0A0E27; /* Texte Bleu Nuit */
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 4px solid #0A0E27; /* Ligne épaisse sombre */
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        h1 { margin: 0; font-size: 26pt; text-transform: uppercase; letter-spacing: -1px; font-weight: 800; }
+        .subtitle { font-size: 14pt; color: #64748B; font-weight: 400; }
+        .tag { 
+            background: #0A0E27; 
+            color: white; 
+            padding: 8px 18px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            font-size: 11pt; 
+            letter-spacing: 1px;
+        }
+
+        /* GRID SYSTEM */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        /* CARDS */
+        .card {
+            background: #FFFFFF;
+            border: 2px solid #E2E8F0; /* Bordure grise légère */
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .card-title {
+            color: #475569;
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            display: block;
+            font-weight: 800;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 10px;
+        }
+
+        /* ZONES SPECIFIQUES (Fond pastel très léger pour lisibilité) */
+        .danger-zone { 
+            background: #FFF5F5; /* Rouge très pâle */
+            border-color: #FECACA; 
+        }
+        .safe-zone { 
+            background: #F0FDF4; /* Vert très pâle */
+            border-color: #BBF7D0; 
+        }
+        
+        .big-number { font-size: 36pt; font-weight: 800; display: block; line-height: 1; margin-bottom: 5px;}
+        .sub-text { font-size: 10pt; color: #64748B; font-weight: 600;}
+
+        /* LISTS */
+        ul { padding-left: 0; margin: 0; list-style: none; }
+        li { margin-bottom: 12px; font-size: 11pt; display: flex; align-items: flex-start; }
+        
+        .icon-box { 
+            width: 24px; height: 24px; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-right: 10px; flex-shrink: 0;
+            font-weight: bold; font-size: 14px;
+        }
+        .icon-no { background: #EF4444; color: white; }
+        .icon-yes { background: #10B981; color: white; }
+        .icon-warn { background: #F59E0B; color: white; }
+
+        /* FOOTER */
+        .footer {
+            margin-top: auto;
+            text-align: right;
+            font-size: 9pt;
+            color: #94A3B8;
+            padding-top: 15px;
+            border-top: 1px solid #E2E8F0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>Conformité Loi 2026</h1>
+            <div class="subtitle">Mémo rapide pour l'affichage bureau</div>
+        </div>
+        <span class="tag">LOI N° 2025-594</span>
+    </div>
+
+    <div class="grid">
+        
+        <div class="card danger-zone">
+            <span class="card-title" style="color:#DC2626">🔴 LES SANCTIONS</span>
+            
+            <div style="margin-bottom: 25px;">
+                <span class="big-number" style="color:#DC2626">75 000 €</span>
+                <span class="sub-text">AMENDE MAX / PERSONNE</span>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <span class="big-number" style="color:#DC2626">375 K€</span>
+                <span class="sub-text">AMENDE MAX / AGENCE</span>
+            </div>
+
+            <p style="font-size:10pt; color:#7F1D1D; font-weight:600; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px;">
+                🚫 Le démarchage téléphonique sans Opt-in (accord écrit préalable) est illégal depuis le 11 Août 2026.
+            </p>
+        </div>
+
+        <div class="card">
+            <span class="card-title" style="color:#0A0E27">📋 RÈGLES D'ENGAGEMENT</span>
+            
+            <ul style="margin-bottom: 20px;">
+                <li><span class="icon-box icon-no">✕</span><span>Appeler une annonce Leboncoin/PAP</span></li>
+                <li><span class="icon-box icon-no">✕</span><span>Utiliser la "Pige" automatisée</span></li>
+                <li><span class="icon-box icon-no">✕</span><span>SMS commercial direct ("Je vends...")</span></li>
+                <li><span class="icon-box icon-warn">!</span><span>Porte-à-porte (Zone Grise / Mal vu)</span></li>
+            </ul>
+
+            <span class="card-title" style="color:#10B981; border:none; margin-bottom:10px;">✅ AUTORISÉ</span>
+            <ul>
+                <li><span class="icon-box icon-yes">✓</span><span>SMS "Douceur" (Demande d'accord)</span></li>
+                <li><span class="icon-box icon-yes">✓</span><span>Appel Entrant (Le client appelle)</span></li>
+                <li><span class="icon-box icon-yes">✓</span><span>Clients en base / Recommandation</span></li>
+            </ul>
+        </div>
+
+        <div class="card safe-zone" style="background:#F1F5F9; border-color:#CBD5E1;">
+            <span class="card-title" style="color:#0F172A">⚡ RÉFORME DPE 2026</span>
+            
+            <div style="text-align:center; padding: 15px 0;">
+                <span style="font-size:12pt; color:#64748B;">NOUVEAU COEFFICIENT</span>
+                <div style="font-size:48pt; font-weight:800; color:#3B82F6; line-height:1;">1.9</div>
+                <span style="font-size:12pt; color:#94A3B8; text-decoration: line-through;">(Avant : 2.3)</span>
+            </div>
+
+            <div style="background:white; padding:15px; border-radius:6px; border:1px solid #E2E8F0;">
+                <strong style="display:block; color:#0A0E27; margin-bottom:5px;">📢 L'argument Vendeur :</strong>
+                <i style="color:#475569; font-size:10.5pt;">"Si vous êtes au chauffage électrique, votre DPE s'améliore mécaniquement de ~17% sans travaux. Vérifions ça ensemble."</i>
+            </div>
+            
+            <div style="margin-top:15px; font-size:9pt; font-weight:600; color:#059669; text-align:center;">
+                ✅ FIN DES PASSOIRES "F" ÉLECTRIQUES
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        KIT MANDATAIRE PRO 2026 — DOCUMENT INTERNE — NE PAS DIFFUSER AU PUBLIC
+    </div>
+
+</body>
+</html>

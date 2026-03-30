@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Séquence Emails - Nurturing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        @page { size: A4; margin: 0; }
+        @media print { body { -webkit-print-color-adjust: exact; } }
+        body { margin: 0; padding: 0; font-family: 'Outfit', sans-serif; background: #F1F5F9; color: #0F172A; }
+
+        .header { background: #0A0E27; color: white; padding: 25px; border-bottom: 4px solid #3B82F6; }
+        h1 { margin: 0; font-size: 18pt; }
+
+        .container { padding: 30px; max-width: 800px; margin: 0 auto; }
+        
+        .email-card {
+            background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px; overflow: hidden; border: 1px solid #E2E8F0;
+        }
+        .email-meta {
+            background: #F8FAFC; padding: 15px 25px; border-bottom: 1px solid #E2E8F0;
+            display: flex; gap: 20px; font-size: 9pt; color: #64748B;
+        }
+        .meta-tag { font-weight: bold; color: #3B82F6; text-transform: uppercase; }
+        
+        .email-body { padding: 30px; font-size: 11pt; line-height: 1.6; color: #334155; }
+        .subject-line { font-weight: 700; color: #0F172A; display: block; margin-bottom: 20px; font-size: 12pt; border-left: 3px solid #0A0E27; padding-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header"><h1>Séquence Nurturing Vendeur (J+2 à J+7)</h1></div>
+    <div class="container">
+
+        <div class="email-card">
+            <div class="email-meta">
+                <span class="meta-tag">EMAIL 1</span>
+                <span>Envoi : J+2 après contact</span>
+                <span>But : Éducation / Peur</span>
+            </div>
+            <div class="email-body">
+                <span class="subject-line">Objet : Pourquoi 30% des ventes PAP échouent (la vérité)</span>
+                Bonjour {{contact.PRENOM}},<br><br>
+                Je vais vous dire quelque chose que Leboncoin et PAP ne vous diront jamais :<br>
+                <strong>30% des ventes entre particuliers n'aboutissent pas.</strong><br><br>
+                Pas "prennent du temps". Échouent.<br>
+                Pourquoi ? Dossier juridique incomplet, financement acheteur non vérifié, compromis mal rédigé.<br><br>
+                Résultat : 3 mois perdus et un bien "grillé" sur le marché.<br>
+                Ne faites pas partie des statistiques.<br><br>
+                Cordialement,<br>
+                <em>[Votre Signature]</em>
+            </div>
+        </div>
+
+        <div class="email-card">
+            <div class="email-meta">
+                <span class="meta-tag">EMAIL 2</span>
+                <span>Envoi : J+5 après contact</span>
+                <span>But : Preuve Juridique</span>
+            </div>
+            <div class="email-body">
+                <span class="subject-line">Objet : 75 000 € (Ce n'est pas le prix de vente)</span>
+                Bonjour {{contact.PRENOM}},<br><br>
+                75 000 €. C'est le montant maximum de l'amende pour non-respect des nouvelles obligations légales (DPE, conformité, vices cachés).<br><br>
+                Vendre seul en 2026, c'est assumer seul la responsabilité pénale.<br>
+                Mes honoraires ne servent pas qu'à faire des photos. Ils servent à prendre ce risque à votre place.<br><br>
+                Êtes-vous sûr que votre dossier technique est à jour ?<br>
+                Répondez "AUDIT" à cet email pour que je vérifie gratuitement.<br><br>
+                À bientôt,<br>
+                <em>[Votre Signature]</em>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
