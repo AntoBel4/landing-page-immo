@@ -1,0 +1,7 @@
+﻿# Fichiers à ignorer
+KIT_MANDATAIRE_2026_PRO/
+*.zip
+node_modules/
+.env
+.DS_Store
+js/
