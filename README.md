@@ -1,4 +1,4 @@
-# Kit Mandataire Immo 2026 - Landing Page High Conversion
+# Kit RentrerDesMandats 2026 - Landing Page High Conversion
 
 **Version :** 1.0 (Tech Premium 2026 Release)  
 **Dernière mise à jour :** Janvier 2026
@@ -6,8 +6,8 @@
 ---
 
 ## 🎯 Objectif
-Cette landing page a pour but unique de **vendre un kit d'outils IA à 47€** pour les agents immobiliers et mandataires.
-L'angle marketing principal est la conformité à la **Loi du 11 août 2026** (interdiction du démarchage téléphonique) pour créer un sentiment d'urgence.
+Cette landing page a pour but unique de **vendre un kit + formation de conformité commerciale à 67€ jusqu'au 1er juillet 2026, puis 97€** pour les agents immobiliers et mandataires.
+L'angle marketing principal est d'aider à continuer à rentrer des mandats plus legalement apres la **Loi du 11 aout 2026** avec une methode plus conforme et tracable.
 
 ---
 
@@ -57,12 +57,42 @@ Le guide gratuit ("5 Stratégies IA pour rentrer des mandats") est généré à 
 
 La V1 est prête visuellement et structurellement. Voici les actions pour le lancement :
 
-*   [ ] **Paiement Stripe** : Remplacer les liens `%%STRIPE_PAYMENT_LINK%%` dans `index.html` par vos vrais liens de paiement Stripe Pro (Mode Live).
+*   [x] **Paiement Stripe** : Injecter le lien de paiement Stripe live dans la configuration runtime de `index.html`.
 *   [ ] **Capture Email (Auto-répondeur)** : Connecter le formulaire `#leadForm` à votre outil (Systeme.io, Mailchimp, ConvertKit) ou via un Webhook n8n.
 *   [ ] **Hébergement** : Mettre le dossier `landing-page-immo` en ligne.
     *   *Recommandé* : Vercel ou Netlify (Gratuit et rapide pour du statique).
     *   *Alternative* : Hostinger ou tout hébergeur PHP/HTML classique (via FTP).
-*   [ ] **Analytics** : Ajouter le script Google Analytics ou Plausible dans le `<head>`.
+*   [x] **Analytics runtime** : Le chargement Plausible / GA4 est maintenant pilote par `window.__RDM_CONFIG.analytics` dans `index.html`.
+*   [ ] **Analytics live** : Verifier en production que Plausible ou GA4 remonte bien `buy_button_clicked` et `lead_captured`.
+
+### Configuration runtime actuelle
+
+Le bloc `window.__RDM_CONFIG` dans `index.html` centralise maintenant les URLs et IDs non secrets :
+
+```html
+<script>
+    window.__RDM_CONFIG = {
+        webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead-capture',
+        stripePaymentLink: 'https://buy.stripe.com/28E6oI3FE7vL7r5cHk5Rm00',
+        supportEmail: 'contact@rentrerdesmandats.fr',
+        consentVersion: 'landing-2026-03-31',
+        analytics: {
+            provider: 'plausible',
+            plausibleDomain: 'rentrerdesmandats.fr',
+            plausibleScriptUrl: 'https://plausible.io/js/script.file-downloads.outbound-links.js'
+        }
+    };
+</script>
+```
+
+Pour passer sur GA4, garder la meme structure et remplacer `analytics` par :
+
+```html
+analytics: {
+    provider: 'ga4',
+    gaMeasurementId: 'G-XXXXXXXXXX'
+}
+```
 
 ---
 

@@ -13,7 +13,7 @@ Créer un tunnel visuel qui guide l'œil du visiteur vers **2 actions critiques*
 
 **Éléments concernés :**
 - Video placeholder (Hero)
-- Bouton "Accéder au Kit — 47€" (Pricing + Final CTA)
+- Bouton "Accéder au Kit — 67€" (Pricing + Final CTA)
 
 **Directives visuelles :**
 
@@ -47,7 +47,7 @@ Créer un tunnel visuel qui guide l'œil du visiteur vers **2 actions critiques*
 
 **Éléments concernés :**
 - Titre H1 ("Vous avez 6 mois...")
-- Prix "47€" dans la pricing card
+- Prix "67€" dans la pricing card
 - Section "Problem" (loi du 11 août)
 - ROI Box
 
@@ -184,7 +184,7 @@ ENTRÉE SUR LA PAGE
         ↓
  [★ PRICING CARD ★]  ← Ancre visuelle
         ↓
-[★ BOUTON ACHAT 47€ ★] ← STAR #2 - Conversion
+[★ BOUTON ACHAT 67€ ★] ← STAR #2 - Conversion
         ↓
     [ROI Calculator] ← Justification rationnelle
         ↓
@@ -219,7 +219,7 @@ Avant de livrer le site à Antigravity, vérifier :
 ### ✅ RESPONSIVE
 - [ ] La video garde-t-elle son ratio 16:9 sur mobile ?
 - [ ] Les boutons font-ils au moins 48px de hauteur sur mobile ?
-- [ ] Le prix "47€" reste-t-il lisible (min 3rem sur mobile) ?
+- [ ] Le prix "67€" reste-t-il lisible (min 3rem sur mobile) ?
 
 ### ✅ INTERACTIONS
 - [ ] Le bouton achat a-t-il 3 états (normal/hover/active) ?

@@ -38,7 +38,7 @@ Workflow dual-trigger qui gère :
 ### 📊 Structure Google Sheets
 
 **Nom du fichier :** `RentrerDesMandats - CRM`  
-**Onglet requis :** `Prospects`
+**Onglet requis :** `Chasse`
 
 **Colonnes (dans l'ordre exact) :**
 ```
@@ -95,7 +95,7 @@ john.doe@example.com | landing-page | 2026-01-30 09:15:00 | LEAD | pdf-telecharg
 ```
 
 #### Template 2 : Email Livraison Kit
-- **Nom :** `Livraison Kit Mandataire 2026 PRO`
+- **Nom :** `Livraison Kit RentrerDesMandats 2026`
 - **Variables :**
   - `{{ params.download_url }}` → Lien vers le ZIP
   - `{{ params.prenom }}` → Prénom du client
@@ -103,7 +103,7 @@ john.doe@example.com | landing-page | 2026-01-30 09:15:00 | LEAD | pdf-telecharg
 **Exemple de contenu :**
 ```html
 <h1>🎉 Bienvenue {{ params.prenom }} !</h1>
-<p>Votre Kit Mandataire 2026 PRO est prêt à télécharger :</p>
+<p>Votre Kit RentrerDesMandats 2026 est prêt à télécharger :</p>
 <a href="{{ params.download_url }}">📦 Télécharger le Kit (ZIP)</a>
 ```
 

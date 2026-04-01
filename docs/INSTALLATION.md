@@ -74,18 +74,45 @@ sudo chmod -R 755 /var/www/rentrerdesmandats.fr
 
 ---
 
-## 🔧 ÉTAPE 3 : Configuration JavaScript
+## 🔧 ÉTAPE 3 : Configuration runtime
 
-Édite `/var/www/rentrerdesmandats.fr/js/main.js` et remplace les placeholders :
+Édite le bloc `window.__RDM_CONFIG` dans `/var/www/rentrerdesmandats.fr/index.html` :
 
-```javascript
-const CONFIG = {
-    // TON webhook n8n réel
-    webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead',
-    
-    // TON Payment Link Stripe réel
-    stripePaymentLink: 'https://buy.stripe.com/XXXXXXXXXXXXXXX'
-};
+```html
+<script>
+    window.__RDM_CONFIG = {
+        webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead-capture',
+        stripePaymentLink: 'https://buy.stripe.com/28E6oI3FE7vL7r5cHk5Rm00',
+        supportEmail: 'contact@rentrerdesmandats.fr',
+        consentVersion: 'landing-2026-03-31',
+        analytics: {
+            provider: 'plausible',
+            plausibleDomain: 'rentrerdesmandats.fr',
+            plausibleScriptUrl: 'https://plausible.io/js/script.file-downloads.outbound-links.js'
+        }
+    };
+</script>
+```
+
+Le JavaScript charge maintenant l'analytics automatiquement selon cette configuration :
+
+- Plausible :
+
+```html
+analytics: {
+    provider: 'plausible',
+    plausibleDomain: 'rentrerdesmandats.fr',
+    plausibleScriptUrl: 'https://plausible.io/js/script.file-downloads.outbound-links.js'
+}
+```
+
+- GA4 :
+
+```html
+analytics: {
+    provider: 'ga4',
+    gaMeasurementId: 'G-XXXXXXXXXX'
+}
 ```
 
 ---
@@ -95,10 +122,10 @@ const CONFIG = {
 1. Va sur https://dashboard.stripe.com/payment-links
 2. Clique "Nouveau lien de paiement"
 3. Configure :
-   - Nom : "Kit Mandataire 2026"
-   - Prix : 47€ (paiement unique)
+   - Nom : "Kit RentrerDesMandats 2026"
+   - Prix : 67€ jusqu'au 1er juillet 2026 (puis 97€)
    - Collecter : Email
-4. Copie le lien généré et colle-le dans main.js
+4. Copie le lien généré et colle-le dans `window.__RDM_CONFIG.stripePaymentLink`
 
 ---
 
@@ -125,7 +152,7 @@ Crée un nouveau workflow dans n8n avec :
 - Response : Immediately
 
 ### Nœud 1 : Google Sheets (Append)
-- Spreadsheet : Ta feuille "Prospects"
+- Spreadsheet : Ta feuille "Chasse"
 - Colonnes : Email, Source, Timestamp, Status="LEAD"
 
 ### Nœud 2 : Brevo (Add Contact)

@@ -272,7 +272,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
           "mode": "id"
         },
         "sheetName": {
@@ -312,8 +312,8 @@
       "position": [2960, 320],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
-          "name": "Google Sheets Account"
+          "id": "8vezCiZx27e3mF7R",
+          "name": "Google Sheets account"
         }
       }
     },

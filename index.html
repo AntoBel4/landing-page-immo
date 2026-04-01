@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Kit Mandataire 2026 - Préparez-vous à la loi du 11 août 2026. 6 GPTs + Templates pour rentrer des mandats sans démarchage téléphonique.">
-    <title>Kit Mandataire 2026 | Rentrer des Mandats sans Démarchage</title>
+        content="Kit RentrerDesMandats 2026 - Kit + formation de conformité commerciale pour continuer à rentrer des mandats plus légalement après le 11 août 2026.">
+    <title>Kit RentrerDesMandats 2026 | Prospection plus conforme après le 11 août 2026</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,20 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        window.__RDM_CONFIG = {
+            webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead-capture',
+            stripePaymentLink: 'https://buy.stripe.com/28E6oI3FE7vL7r5cHk5Rm00',
+            supportEmail: 'contact@rentrerdesmandats.fr',
+            consentVersion: 'landing-2026-03-31',
+            analytics: {
+                provider: 'plausible',
+                plausibleDomain: 'rentrerdesmandats.fr',
+                plausibleScriptUrl: 'https://plausible.io/js/script.file-downloads.outbound-links.js'
+            }
+        };
+    </script>
+    <script src="js/main.js" defer></script>
 </head>
 
 <body>
@@ -43,44 +57,39 @@
             </div>
 
             <h1 class="hero-title">
-                Vous avez <span class="highlight">6 mois</span> pour adapter votre prospection.<br>
-                <span class="title-accent">Ou perdre 80% de vos mandats.</span>
+                D'ici le <span class="highlight">11 août 2026</span>, adaptez votre prospection.<br>
+                <span class="title-accent">Avant que vos méthodes actuelles ne deviennent un risque.</span>
             </h1>
 
             <p class="hero-subtitle">
                 Le 11 août 2026, le démarchage téléphonique devient illégal. Amende : <strong>75 000€</strong>.<br>
-                Ce kit contient <strong>6 assistants IA</strong> pour rentrer des mandats sans lever le téléphone.
+                Ce kit + formation de conformité commerciale vous aide à mettre en place une prospection plus
+                conforme, traçable et actionnable pour la période post-11 août 2026.
             </p>
+            <p class="hero-packaging">Vous recevez immédiatement : 6 assistants IA, templates de messages, scripts
+                post-consentement, checklist de conformité et mini-formation vidéo.</p>
 
-            <!-- VIDEO PLACEHOLDER -->
             <div class="video-container">
                 <div class="video-placeholder">
-                    <div class="play-button">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                        </svg>
-                    </div>
+                    <div class="play-button">📦</div>
+                    <p class="video-label"><strong>Aperçu du kit</strong><br>Templates, scripts, checklist et
+                        mini-formation livrés dès l'achat.</p>
                 </div>
             </div>
 
             <div class="hero-cta-group">
                 <button onclick="openLeadModal()" class="btn btn-primary">
-                    <span>Télécharger le Guide Gratuit</span>
+                    <span>Recevoir la checklist gratuite</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12l7 7 7-7" />
                     </svg>
                 </button>
-                <a href="#offre" class="btn btn-secondary">Voir le Kit Complet →</a>
+                <a href="#offre" class="btn btn-secondary">Voir ce que contient le kit →</a>
             </div>
 
             <div class="hero-proof">
-                <div class="proof-avatars">
-                    <div class="avatar">ML</div>
-                    <div class="avatar">TC</div>
-                    <div class="avatar">VD</div>
-                    <div class="avatar">+</div>
-                </div>
-                <span><strong>193 agents</strong> ont déjà adapté leur méthode</span>
+                <span>Le kit vend une méthode et des supports opérationnels. Il ne remplace pas un avis juridique
+                    individualisé.</span>
             </div>
         </div>
     </section>
@@ -125,8 +134,8 @@
 
             <div class="problem-quote">
                 <blockquote>
-                    "Les agents qui n'adaptent pas leur méthode <em>maintenant</em>
-                    verront leur pipeline s'écrouler en août 2026. C'est mathématique."
+                    Les agents qui préparent une alternative traçable avant août 2026
+                    prendront une vraie longueur d'avance sur ceux qui attendent le dernier moment.
                 </blockquote>
             </div>
         </div>
@@ -186,7 +195,7 @@
             <div class="lead-magnet-wrapper">
                 <div class="lead-magnet-content">
                     <div class="free-badge">📄 GRATUIT</div>
-                    <h2>Le Guide "5 Stratégies IA pour 2026"</h2>
+                    <h2>La checklist gratuite de transition 2026</h2>
                     <p>12 pages pour comprendre comment rentrer des mandats <strong>sans décrocher le
                             téléphone</strong>.</p>
 
@@ -214,14 +223,23 @@
                             <input type="email" id="email" name="email" placeholder="Votre email professionnel"
                                 required>
                             <button type="submit" class="btn btn-primary">
-                                <span>Recevoir le Guide</span>
+                                <span>Recevoir la checklist</span>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <path d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
                             </button>
                         </div>
-                        <p class="form-notice">🔒 Pas de spam. Désinscription en 1 clic.</p>
+                        <label class="consent-check">
+                            <input type="checkbox" name="consent" required>
+                            <span>J'accepte de recevoir la checklist gratuite, les emails de suivi associés et les
+                                informations commerciales liées à l'offre RentrerDesMandats. Je peux me désinscrire à
+                                tout moment via le lien présent dans chaque email, conformément aux <a
+                                    href="legal/mentions-legales.html">mentions légales</a>.</span>
+                        </label>
+                        <p class="form-notice">🔒 Vos données servent uniquement à l'envoi de la checklist, au suivi
+                            associé et aux informations commerciales de RentrerDesMandats. Désinscription en 1 clic.</p>
+                        <p class="form-status" data-form-status aria-live="polite"></p>
                     </form>
                 </div>
 
@@ -252,7 +270,8 @@
                 Kit Complet — <span class="year-badge">Prospection IA 2026</span>
             </h2>
             <p class="section-subtitle">
-                Tout pour adapter votre prospection avant le 11 août 2026
+                Ce que vous recevez dès l'achat pour mettre en place une prospection plus conforme avant le 11 août
+                2026
             </p>
 
             <div class="product-grid">
@@ -334,11 +353,11 @@
                             <p>Vérifiez que vous êtes dans les clous</p>
                         </div>
                     </div>
-                    <div class="bonus-item">
-                        <span class="bonus-emoji">🎧</span>
+                <div class="bonus-item">
+                        <span class="bonus-emoji">💬</span>
                         <div>
-                            <strong>Podcast Mindset</strong>
-                            <p>30 min d'audio motivation</p>
+                            <strong>Pack FAQ / Objections</strong>
+                            <p>Réponses prêtes sur conformité, livraison et mise en place</p>
                         </div>
                     </div>
                 </div>
@@ -351,20 +370,21 @@
         <div class="container">
             <div class="pricing-card">
                 <div class="pricing-header">
-                    <div class="pricing-badge">OFFRE DE LANCEMENT</div>
+                    <div class="pricing-badge">67€ JUSQU'AU 1ER JUILLET 2026</div>
                     <div class="pricing-price">
                         <span class="price-old">97€</span>
-                        <span class="price-current">47€</span>
+                        <span class="price-current">67€</span>
                     </div>
-                    <p class="pricing-subtitle">Paiement unique • Accès à vie • Mises à jour incluses</p>
+                    <p class="pricing-subtitle">Puis 97€ • Paiement unique • Accès à vie • Mises à jour incluses</p>
                 </div>
 
                 <div class="pricing-content">
                     <ul class="pricing-features">
                         <li><span class="check">✓</span><strong>6 Assistants IA</strong> (prêts à l'emploi)</li>
-                        <li><span class="check">✓</span><strong>Templates Email/SMS</strong> (testés sur le terrain)
+                        <li><span class="check">✓</span><strong>Templates Email/SMS</strong> (prêts à adapter à votre
+                            activité)
                         </li>
-                        <li><span class="check">✓</span><strong>Scripts de conversion</strong> (PAP, FSBO, expirations)
+                        <li><span class="check">✓</span><strong>Scripts de conversion</strong> (après consentement)
                         </li>
                         <li><span class="check">✓</span><strong>Checklist légale</strong> (conformité RGPD + Bloctel)
                         </li>
@@ -373,15 +393,18 @@
                             légaux)</li>
                     </ul>
 
-                    <a href="%%STRIPE_PAYMENT_LINK%%" class="btn btn-buy" id="buyButton">
-                        <span>Accéder au Kit Complet</span>
-                        <span class="btn-price">47€</span>
+                    <a href="#" class="btn btn-buy" id="buyButton" data-price-eur="67">
+                        <span>Accéder au Kit Complet - 67€</span>
+                        <span class="btn-price">67€</span>
                     </a>
 
                     <div class="pricing-guarantee">
                         <span class="guarantee-icon">🔒</span>
                         <p><strong>Garantie 14 jours</strong> — Satisfait ou remboursé, sans condition.</p>
                     </div>
+                    <p class="pricing-disclaimer">Le kit fournit des outils marketing, scripts et checklists
+                        opérationnelles. La conformité finale dépend de vos usages, de vos preuves de consentement, de
+                        vos process et des mises à jour réglementaires applicables.</p>
                 </div>
 
                 <div class="pricing-footer">
@@ -397,13 +420,14 @@
 
             <!-- ROI Calculator -->
             <div class="roi-box">
-                <h3>🧮 Calcul simple</h3>
+                <h3>🧮 Repère simple</h3>
                 <p>
                     <strong>1 mandat PAP</strong> = 5 000€ de commission moyenne.<br>
-                    <strong>Ce kit</strong> = 47€.<br>
-                    S'il vous fait gagner <strong>2h par semaine</strong> (= 8h/mois),<br>
-                    vous libérez du temps pour <strong>1 mandat de plus tous les 2 mois</strong>.<br>
-                    <span class="roi-result">ROI = 10 500% sur 12 mois.</span>
+                    <strong>Ce kit</strong> = 67€.<br>
+                    L'enjeu n'est pas une promesse de ROI automatique.<br>
+                    C'est d'avoir plus vite une méthode exploitable, documentée et plus conforme pour continuer à
+                    générer des mandats.<br>
+                    <span class="roi-result">Un seul mandat couvre largement le coût du kit.</span>
                 </p>
             </div>
         </div>
@@ -469,9 +493,9 @@
                         <span class="faq-toggle">+</span>
                     </h3>
                     <div class="faq-answer">
-                        <p>Un email immédiat avec un lien de téléchargement vers un fichier ZIP contenant : les 6
-                            fichiers GPT (.txt), le tutoriel vidéo, les templates Excel/PDF, et tous les bonus. Accès à
-                            vie + futures mises à jour par email.</p>
+                        <p>Un email immédiat avec l'accès au kit RentrerDesMandats 2026 : 6 assistants IA, templates
+                            email/SMS/WhatsApp, scripts post-consentement, checklist de conformité, mini-formation vidéo
+                            et bonus utiles. Accès à vie + mises à jour de wording jusqu'à la bascule 2026.</p>
                     </div>
                 </div>
 
@@ -489,7 +513,7 @@
             </div>
 
             <div class="faq-contact">
-                <p>Une autre question ? <a href="mailto:contact@kit-mandataire.com">contact@kit-mandataire.com</a></p>
+                <p>Une autre question ? <a href="mailto:contact@rentrerdesmandats.fr">contact@rentrerdesmandats.fr</a></p>
             </div>
         </div>
     </section>
@@ -499,10 +523,10 @@
         <div class="container">
             <div class="cta-content">
                 <h2>Le compte à rebours a commencé.</h2>
-                <p>6 mois pour mettre en place une machine à mandats conforme.<br>
-                    Ou regarder vos concurrents prendre 100% du marché PAP en septembre 2026.</p>
+                <p>Le plus dur n'est pas d'acheter un kit.<br>
+                    C'est de reconstruire une méthode plus conforme avant le 11 août 2026.</p>
                 <a href="#achat" class="btn btn-primary btn-large">
-                    <span>Accéder au Kit — 47€</span>
+                    <span>Accéder au kit complet - 67€</span>
                 </a>
                 <p class="cta-subtext">Paiement sécurisé • Livraison immédiate • Garantie 14 jours</p>
             </div>
@@ -518,10 +542,9 @@
                     <span class="logo-text">RentrerDesMandats</span>
                 </div>
                 <div class="footer-links">
-                    <a href="/legal/mentions-legales.html">Mentions légales</a>
-                    <a href="/legal/cgv.html">CGV</a>
-                    <a
-                        href="/cdn-cgi/l/email-protection#91f2feffe5f0f2e5d1e3f4ffe5e3f4e3f5f4e2fcf0fff5f0e5e2bff7e3">Contact</a>
+                    <a href="legal/mentions-legales.html">Mentions légales</a>
+                    <a href="legal/cgv.html">CGV</a>
+                    <a href="mailto:contact@rentrerdesmandats.fr">Contact</a>
                 </div>
                 <p class="footer-copy">© 2026 RentrerDesMandats. Tous droits réservés.</p>
             </div>
@@ -540,10 +563,17 @@
                 <div class="form-group">
                     <input type="email" name="email" placeholder="Votre email professionnel" required>
                 </div>
+                <label class="consent-check">
+                    <input type="checkbox" name="consent" required>
+                    <span>J'accepte de recevoir le guide, les emails de suivi et les informations liées à l'offre
+                        RentrerDesMandats conformément à la <a href="legal/mentions-legales.html">politique de
+                            confidentialité</a>.</span>
+                </label>
                 <button type="submit" class="btn btn-primary btn-full">
-                    <span>Recevoir le Guide</span>
+                    <span>Recevoir la checklist</span>
                 </button>
                 <p class="form-notice">🔒 Pas de spam. Désinscription en 1 clic.</p>
+                <p class="form-status" data-form-status aria-live="polite"></p>
             </form>
         </div>
     </div>
@@ -561,40 +591,21 @@
     <script>
         function openLeadModal() {
             document.getElementById('leadModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLeadModal() {
             document.getElementById('leadModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('active');
-        }
-
-        // Close on background click
         window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
+                document.body.style.overflow = '';
             }
-        }
+        };
     </script>
-<script>
-    // FAQ Toggle Logic
-    document.querySelectorAll('.faq-question').forEach(button => {
-        button.addEventListener('click', () => {
-            const faqItem = button.parentElement;
-            const isActive = faqItem.classList.contains('active');
-            
-            // Close all others (optional, but cleaner)
-            document.querySelectorAll('.faq-item').forEach(item => {
-                item.classList.remove('active');
-            });
+</body>
 
-            // Toggle current if it wasn't active
-            if (!isActive) {
-                faqItem.classList.add('active');
-            }
-        });
-    });
-</script>
-
+</html>

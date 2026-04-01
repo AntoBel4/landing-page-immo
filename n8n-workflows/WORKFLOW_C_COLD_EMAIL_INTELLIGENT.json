@@ -46,7 +46,7 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
           "mode": "id"
         },
         "sheetName": {
@@ -73,8 +73,8 @@
       "position": [980, 300],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
-          "name": "Google Sheets Account"
+          "id": "8vezCiZx27e3mF7R",
+          "name": "Google Sheets account"
         }
       }
     },
@@ -152,7 +152,7 @@
         "email": "={{ $('📊 GSheet - Lire Leads A_CONTACTER').item.json.Email }}",
         "subject": "Solution IA pour Mandataires - Loi 11 Août 2026",
         "additionalFields": {
-          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO ===",
+          "templateId": "9",
           "params": {
             "parameter": [
               {
@@ -179,13 +179,13 @@
       },
       "id": "brevo-send-email",
       "name": "📨 Brevo - Envoyer Email",
-      "type": "n8n-nodes-base.brevo",
+      "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
       "position": [2020, 300],
       "credentials": {
-        "brevoApi": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
-          "name": "Brevo API"
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Paperclip temp sendInBlueApi"
         }
       }
     },
@@ -194,7 +194,7 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
           "mode": "id"
         },
         "sheetName": {
@@ -227,8 +227,8 @@
       "position": [2280, 300],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
-          "name": "Google Sheets Account"
+          "id": "8vezCiZx27e3mF7R",
+          "name": "Google Sheets account"
         }
       }
     },

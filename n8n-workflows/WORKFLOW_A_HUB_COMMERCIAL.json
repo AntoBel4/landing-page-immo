@@ -9,7 +9,7 @@
       "typeVersion": 1,
       "position": [140, 140],
       "parameters": {
-        "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP\n\n**Configuration requise :**\n- Google Sheets avec onglet 'Prospects'\n- Brevo (2 listes : Leads + Clients)\n- Stripe Webhook configuré\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
+        "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP\n\n**Configuration requise :**\n- Google Sheets avec onglet 'Chasse'\n- Brevo (2 listes : Leads + Clients)\n- Stripe Webhook configuré\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
         "height": 340,
         "width": 420
       }
@@ -50,7 +50,7 @@
           "string": [
             {
               "value1": "={{ $json.body.type }}",
-              "operation": "equals",
+              "operation": "equal",
               "value2": "checkout.session.completed"
             }
           ]
@@ -67,12 +67,12 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "value": "1mUsvH3y4TNajVkfrBPYQFW9eoNA2rVE5nsdu9i9_aKQ",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Prospects",
+          "value": "Chasse",
           "mode": "list"
         },
         "columns": {
@@ -94,8 +94,8 @@
       "position": [920, 160],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
-          "name": "Google Sheets Account"
+          "id": "8vezCiZx27e3mF7R",
+          "name": "Google Sheets account"
         }
       }
     },
@@ -104,7 +104,7 @@
         "operation": "create",
         "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
         "additionalFields": {
-          "listIds": ["=== LIST ID BREVO 'LEADS LANDING PAGE' ==="],
+          "listIds": ["3"],
           "attributes": {
             "attribute": [
               {
@@ -122,13 +122,13 @@
       },
       "id": "brevo-create-lead",
       "name": "📧 Brevo - Créer Contact Lead",
-      "type": "n8n-nodes-base.brevo",
+      "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
       "position": [920, 320],
       "credentials": {
-        "brevoApi": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
-          "name": "Brevo API"
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Paperclip temp sendInBlueApi"
         }
       }
     },
@@ -138,7 +138,7 @@
         "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
         "subject": "🎁 Votre Guide IA Mandataire 2026",
         "additionalFields": {
-          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO (EMAIL CADEAU PDF) ===",
+          "templateId": "10",
           "params": {
             "parameter": [
               {
@@ -153,13 +153,13 @@
       },
       "id": "brevo-send-pdf",
       "name": "📨 Brevo - Envoyer PDF Gratuit",
-      "type": "n8n-nodes-base.brevo",
+      "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
       "position": [1180, 320],
       "credentials": {
-        "brevoApi": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
-          "name": "Brevo API"
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Paperclip temp sendInBlueApi"
         }
       }
     },
@@ -190,12 +190,12 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "=== REMPLACER PAR TON GOOGLE SHEET ID ===",
+          "value": "1mUsvH3y4TNajVkfrBPYQFW9eoNA2rVE5nsdu9i9_aKQ",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Prospects",
+          "value": "Chasse",
           "mode": "list"
         },
         "filtersUI": {
@@ -224,8 +224,8 @@
       "position": [1400, 400],
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS GOOGLE ===",
-          "name": "Google Sheets Account"
+          "id": "8vezCiZx27e3mF7R",
+          "name": "Google Sheets account"
         }
       }
     },
@@ -234,8 +234,8 @@
         "operation": "update",
         "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
         "additionalFields": {
-          "listIds": ["=== LIST ID BREVO 'CLIENTS' ==="],
-          "unlinkListIds": ["=== LIST ID BREVO 'LEADS LANDING PAGE' ==="],
+          "listIds": ["4"],
+          "unlinkListIds": ["3"],
           "attributes": {
             "attribute": [
               {
@@ -256,13 +256,13 @@
       },
       "id": "brevo-update-client",
       "name": "📧 Brevo - Migrer vers Clients",
-      "type": "n8n-nodes-base.brevo",
+      "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
       "position": [1400, 560],
       "credentials": {
-        "brevoApi": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
-          "name": "Brevo API"
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Paperclip temp sendInBlueApi"
         }
       }
     },
@@ -270,9 +270,9 @@
       "parameters": {
         "operation": "sendTransacEmail",
         "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
-        "subject": "🎉 Votre Kit Mandataire 2026 PRO est prêt !",
+        "subject": "🎉 Votre Kit RentrerDesMandats 2026 est prêt !",
         "additionalFields": {
-          "templateId": "=== REMPLACER PAR TON TEMPLATE ID BREVO (EMAIL LIVRAISON KIT) ===",
+          "templateId": "8",
           "params": {
             "parameter": [
               {
@@ -291,13 +291,13 @@
       },
       "id": "brevo-send-kit",
       "name": "📨 Brevo - Livrer Kit ZIP",
-      "type": "n8n-nodes-base.brevo",
+      "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
       "position": [1660, 560],
       "credentials": {
-        "brevoApi": {
-          "id": "=== REMPLACER PAR TES CREDENTIALS BREVO ===",
-          "name": "Brevo API"
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Paperclip temp sendInBlueApi"
         }
       }
     },

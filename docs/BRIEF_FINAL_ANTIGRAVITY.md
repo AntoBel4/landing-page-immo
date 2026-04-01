@@ -2,7 +2,7 @@
 
 ## CONTEXTE DU PROJET
 
-**Produit** : Kit Complet pour agents immobiliers (47€)
+**Produit** : Kit RentrerDesMandats 2026 (67€ jusqu'au 1er juillet 2026, puis 97€)
 **Objectif** : Refonte complète du copywriting + design pour atteindre une esthétique "Tech Premium 2026"
 **Cible** : Agents immobiliers indépendants (manque de temps + pige immobilière)
 **Deadline** : Loi du 11 août 2026 = angle d'urgence
@@ -39,9 +39,9 @@
 Consulter le fichier **INSTRUCTIONS_COPYWRITING.md** pour :
 
 1. **Hero Section** (lignes 38-85)
-   - Nouveau H1 : "Vous avez **6 mois** pour adapter votre prospection"
+   - Nouveau H1 ancre sur le **11 août 2026**
    - Nouveau subtitle avec chiffre d'urgence (75 000€ amende)
-   - Social proof : 127 → 193 agents
+   - Suppression du social proof non prouvé
 
 2. **Problem Section** (lignes 90-134)
    - Titre : "11 août 2026 : La fin du cold calling"
@@ -138,9 +138,9 @@ Consulter le fichier **INSTRUCTIONS_DESIGN.md** pour :
 Après avoir appliqué les changements, vérifier :
 
 #### COPYWRITING
-- [ ] Mot "6 mois" apparaît dans le H1
-- [ ] Chiffre "80%" apparaît dans le H1
-- [ ] Social proof : "193 agents" (pas 127)
+- [ ] Date "11 août 2026" apparaît dans le H1
+- [ ] Le H1 ne contient pas de promesse catastrophiste non prouvée
+- [ ] Aucun social proof chiffré non prouvé ne reste dans la page
 - [ ] ROI : "2h par semaine" mentionné
 
 #### DESIGN - HIÉRARCHIE VISUELLE
@@ -163,7 +163,7 @@ Après avoir appliqué les changements, vérifier :
 #### RESPONSIVE
 - [ ] Video garde ratio 16:9 sur iPhone SE (375px)
 - [ ] Boutons font 48px min de hauteur sur mobile
-- [ ] Prix "47€" reste lisible (3rem min sur mobile)
+- [ ] Prix "67€" reste lisible (3rem min sur mobile)
 - [ ] Pas de scroll horizontal sur aucun device
 
 ---

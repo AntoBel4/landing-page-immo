@@ -1,7 +1,7 @@
-# INSTRUCTIONS COPYWRITING - Landing Page Agent Immobilier
+# INSTRUCTIONS COPYWRITING - Landing Page RentrerDesMandats
 
 ## CONTEXTE
-Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **pige immobilière**. Ton : Professionnel, direct, sans BS. Angle : "Vous avez 6 mois pour vous adapter ou disparaître".
+Refonte du copywriting pour cibler la douleur du **manque de temps**, de la **conformite commerciale** et de la **pige immobiliere**. Ton : Professionnel, direct, sans promesse excessive. Angle : "Adaptez votre prospection avant le 11 aout 2026".
 
 ---
 
@@ -12,8 +12,8 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
 **REMPLACER ligne 45-48 (h1.hero-title) :**
 ```html
 <h1 class="hero-title">
-    Vous avez <span class="highlight">6 mois</span> pour adapter votre prospection.<br>
-    <span class="title-accent">Ou perdre 80% de vos mandats.</span>
+    D'ici le <span class="highlight">11 août 2026</span>, adaptez votre prospection.<br>
+    <span class="title-accent">Avant que vos méthodes actuelles ne deviennent un risque.</span>
 </h1>
 ```
 
@@ -21,20 +21,14 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
 ```html
 <p class="hero-subtitle">
     Le 11 août 2026, le démarchage téléphonique devient illégal. Amende : <strong>75 000€</strong>.<br>
-    Ce kit contient <strong>6 assistants IA</strong> pour rentrer des mandats sans lever le téléphone.
+    Ce kit + formation vous aide à mettre en place une prospection plus conforme, traçable et actionnable.
 </p>
 ```
 
 **REMPLACER ligne 76-84 (div.hero-proof) :**
 ```html
 <div class="hero-proof">
-    <div class="proof-avatars">
-        <div class="avatar">ML</div>
-        <div class="avatar">TC</div>
-        <div class="avatar">VD</div>
-        <div class="avatar">+</div>
-    </div>
-    <span><strong>193 agents</strong> ont déjà adapté leur méthode</span>
+    <span>Le kit vend une methode et des supports operationnels. Il ne remplace pas un avis juridique individualise.</span>
 </div>
 ```
 
@@ -63,8 +57,8 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
 **REMPLACER ligne 127-132 (blockquote) :**
 ```html
 <blockquote>
-    "Les agents qui n'adaptent pas leur méthode <em>maintenant</em> 
-    verront leur pipeline s'écrouler en août 2026. C'est mathématique."
+    Les agents qui preparent une alternative tracable avant aout 2026
+    prendront une vraie longueur d'avance sur ceux qui attendent le dernier moment.
 </blockquote>
 ```
 
@@ -144,7 +138,7 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
     <h3>🧮 Calcul simple</h3>
     <p>
         <strong>1 mandat PAP</strong> = 5 000€ de commission moyenne.<br>
-        <strong>Ce kit</strong> = 47€.<br>
+        <strong>Ce kit</strong> = 67€ jusqu'au 1er juillet 2026 puis 97€.<br>
         S'il vous fait gagner <strong>2h par semaine</strong> (= 8h/mois),<br>
         vous libérez du temps pour <strong>1 mandat de plus tous les 2 mois</strong>.<br>
         <span class="roi-result">ROI = 10 500% sur 12 mois.</span>
@@ -163,7 +157,7 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
     <p>6 mois pour mettre en place une machine à mandats conforme.<br>
     Ou regarder vos concurrents prendre 100% du marché PAP en septembre 2026.</p>
     <a href="#achat" class="btn btn-primary btn-large">
-        <span>Accéder au Kit — 47€</span>
+        <span>Accéder au Kit — 67€</span>
     </a>
     <p class="cta-subtext">Paiement sécurisé • Livraison immédiate • Garantie 14 jours</p>
 </div>
@@ -209,16 +203,16 @@ Refonte du copywriting pour cibler la douleur du **manque de temps** et de la **
 ## RÉSUMÉ DES CHANGEMENTS COPYWRITING
 
 ### Points forts ajoutés :
-✅ **Urgence renforcée** : "6 mois" au lieu de "quelques mois"  
-✅ **Douleur amplifiée** : "perdre 80% de vos mandats" (chiffre précis)  
+✅ **Urgence clarifiée** : date butoir du 11 aout 2026 au lieu d'une urgence floue
+✅ **Positionnement assaini** : prospection plus conforme au lieu d'un angle de contournement
 ✅ **Bénéfice temps** : "2h par semaine" = argument productivité  
-✅ **Social proof actualisé** : 127 → 193 agents (crédibilité)  
+✅ **Preuve assainie** : suppression d'un social proof non prouvé
 ✅ **ROI recalculé** : Focus sur le temps libéré, pas juste l'argent  
 ✅ **Ton plus direct** : Moins de "jargon vendeur", plus de faits bruts  
 
 ### Mots-clés optimisés pour conversion :
-- "6 mois" (urgence temporelle)
-- "80%" (impact chiffré)
+- "11 août 2026" (urgence temporelle)
+- "plus conforme" (sécurité juridique)
 - "24/7" (automatisation)
 - "2h par semaine" (bénéfice concret)
 - "Conforme" (sécurité légale)

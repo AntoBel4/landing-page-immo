@@ -1,342 +1,522 @@
 /* ============================================
    RENTRER DES MANDATS - Landing Page JS
-   Interactions + Webhook n8n Integration
+   Runtime, lead capture, and CTA safeguards
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // === CONFIGURATION ===
+document.addEventListener('DOMContentLoaded', function () {
     const CONFIG = {
-        // Remplacer par ton webhook n8n réel
-        webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead',
-        // Remplacer par ton Payment Link Stripe réel
-        stripePaymentLink: 'https://buy.stripe.com/XXXXXXXXXXXXXXX'
+        webhookLeadUrl: 'https://n8n.rentrerdesmandats.fr/webhook/lead-capture',
+        stripePaymentLink: 'https://buy.stripe.com/28E6oI3FE7vL7r5cHk5Rm00',
+        supportEmail: 'contact@rentrerdesmandats.fr',
+        consentVersion: 'landing-2026-03-31',
+        analytics: {},
+        ...window.__RDM_CONFIG
     };
 
-    // === HEADER SCROLL EFFECT ===
+    const CONSENT_TEXT = "J'accepte de recevoir la checklist gratuite, les emails de suivi associes et les informations commerciales liees a l'offre RentrerDesMandats.";
     const header = document.querySelector('.header');
-    let lastScroll = 0;
-
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-            header.style.boxShadow = 'none';
-        }
-        
-        lastScroll = currentScroll;
-    });
-
-    // === SMOOTH SCROLL FOR ANCHOR LINKS ===
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const headerHeight = header.offsetHeight;
-                const targetPosition = target.offsetTop - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // === LEAD FORM SUBMISSION ===
-    const leadForm = document.getElementById('leadForm');
-    
-    if (leadForm) {
-        leadForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const emailInput = document.getElementById('email');
-            const email = emailInput.value.trim();
-            const submitBtn = leadForm.querySelector('button[type="submit"]');
-            
-            // Validation basique
-            if (!email || !isValidEmail(email)) {
-                shakeElement(emailInput);
-                return;
-            }
-            
-            // Disable button and show loading
-            submitBtn.disabled = true;
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span>Envoi en cours...</span>';
-            
-            try {
-                // Envoi vers webhook n8n
-                const response = await fetch(CONFIG.webhookLeadUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        source: 'landing-page',
-                        timestamp: new Date().toISOString(),
-                        page_url: window.location.href,
-                        user_agent: navigator.userAgent
-                    })
-                });
-                
-                if (response.ok) {
-                    // Success
-                    showModal();
-                    emailInput.value = '';
-                    
-                    // Track conversion (si analytics)
-                    trackEvent('lead_captured', { email_domain: email.split('@')[1] });
-                } else {
-                    throw new Error('Webhook error');
-                }
-                
-            } catch (error) {
-                console.error('Lead submission error:', error);
-                
-                // Fallback: afficher quand même le success (le webhook rattrapera)
-                // et stocker en localStorage pour retry
-                storeLeadLocally(email);
-                showModal();
-                emailInput.value = '';
-            }
-            
-            // Re-enable button
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-        });
-    }
-
-    // === STRIPE PAYMENT LINK ===
     const buyButton = document.getElementById('buyButton');
-    
-    if (buyButton) {
-        // Remplacer le placeholder par le vrai lien
-        buyButton.href = CONFIG.stripePaymentLink;
-        
-        buyButton.addEventListener('click', function(e) {
-            // Track click
-            trackEvent('buy_button_clicked', { price: 47 });
-        });
-    }
+    const successModal = document.getElementById('successModal');
 
-    // === FAQ ACCORDION ===
-    const faqItems = document.querySelectorAll('.faq-item');
-    
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        
-        question.addEventListener('click', () => {
-            // Close all other items
-            faqItems.forEach(otherItem => {
-                if (otherItem !== item && otherItem.classList.contains('active')) {
-                    otherItem.classList.remove('active');
-                }
-            });
-            
-            // Toggle current item
-            item.classList.toggle('active');
-        });
-    });
-
-    // === MODAL FUNCTIONS ===
-    window.showModal = function() {
-        const modal = document.getElementById('successModal');
-        if (modal) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-    };
-
-    window.closeModal = function() {
-        const modal = document.getElementById('successModal');
-        if (modal) {
-            modal.classList.remove('active');
+    window.closeModal = function () {
+        if (successModal) {
+            successModal.classList.remove('active');
             document.body.style.overflow = '';
         }
     };
 
-    // Close modal on backdrop click
-    const modal = document.getElementById('successModal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
+    window.showModal = function () {
+        if (successModal) {
+            successModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    window.addEventListener('scroll', function () {
+        if (!header) {
+            return;
+        }
+
+        header.style.boxShadow = window.pageYOffset > 100 ? '0 4px 20px rgba(0, 0, 0, 0.1)' : 'none';
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function (event) {
+            const targetSelector = anchor.getAttribute('href');
+            if (!targetSelector || targetSelector === '#') {
+                return;
+            }
+
+            const target = document.querySelector(targetSelector);
+            if (!target) {
+                return;
+            }
+
+            event.preventDefault();
+            const headerOffset = header ? header.offsetHeight : 0;
+            const targetPosition = target.offsetTop - headerOffset - 20;
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    document.querySelectorAll('.faq-question').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const faqItem = button.parentElement;
+            const isActive = faqItem.classList.contains('active');
+
+            document.querySelectorAll('.faq-item').forEach(function (item) {
+                item.classList.remove('active');
+            });
+
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        });
+    });
+
+    [document.getElementById('leadForm'), document.getElementById('leadFormModal')].forEach(function (form) {
+        if (!form) {
+            return;
+        }
+
+        form.addEventListener('submit', function (event) {
+            handleLeadSubmit(event, form);
+        });
+    });
+
+    if (successModal) {
+        successModal.addEventListener('click', function (event) {
+            if (event.target === successModal) {
                 closeModal();
             }
         });
     }
 
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
             closeModal();
+            if (typeof window.closeLeadModal === 'function') {
+                window.closeLeadModal();
+            }
         }
     });
 
-    // === ANIMATION ON SCROLL ===
-    const observerOptions = {
+    if (buyButton) {
+        const livePaymentLink = getLivePaymentLink();
+
+        if (livePaymentLink) {
+            buyButton.href = livePaymentLink;
+            buyButton.addEventListener('click', function () {
+                trackEvent('buy_button_clicked', { price: getButtonPrice(buyButton) });
+            });
+        } else {
+            const supportMailto = getSupportMailto();
+            buyButton.href = supportMailto;
+            buyButton.setAttribute('target', '_blank');
+            buyButton.setAttribute('rel', 'noopener noreferrer');
+            buyButton.querySelector('span').textContent = 'Recevoir le lien de paiement';
+            buyButton.classList.add('btn-buy-fallback');
+            trackEvent('checkout_link_missing', { fallback: 'mailto' });
+        }
+    }
+
+    const observer = new IntersectionObserver(function (entries, instance) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                instance.unobserve(entry.target);
+            }
+        });
+    }, {
         root: null,
         rootMargin: '0px',
         threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe elements
-    document.querySelectorAll('.problem-card, .gpt-card, .step, .bonus-item, .faq-item').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(el);
     });
 
-    // Add animation class
-    const style = document.createElement('style');
-    style.textContent = `
+    document.querySelectorAll('.problem-card, .gpt-card, .step, .bonus-item, .faq-item').forEach(function (element) {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(element);
+    });
+
+    injectStyle(`
         .animate-in {
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
-    `;
-    document.head.appendChild(style);
+    `);
 
-    // === UTILITY FUNCTIONS ===
-    
-    function isValidEmail(email) {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
-
-    function shakeElement(element) {
-        element.style.animation = 'shake 0.5s ease';
-        element.style.borderColor = '#ff6b6b';
-        
-        setTimeout(() => {
-            element.style.animation = '';
-            element.style.borderColor = '';
-        }, 500);
-    }
-
-    // Add shake animation
-    const shakeStyle = document.createElement('style');
-    shakeStyle.textContent = `
+    injectStyle(`
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
         }
-    `;
-    document.head.appendChild(shakeStyle);
+    `);
 
-    function storeLeadLocally(email) {
-        // Fallback storage pour retry ultérieur
-        const leads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
-        leads.push({
-            email: email,
-            timestamp: new Date().toISOString()
+    injectStyle(`
+        .btn-buy-fallback {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .hero-packaging {
+            max-width: 760px;
+            margin: -0.5rem auto 2rem;
+            text-align: center;
+            color: #334155;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .video-label {
+            margin-top: 1rem;
+            max-width: 20rem;
+            text-align: center;
+            color: #0f172a;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .pricing-disclaimer {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #475569;
+        }
+
+        .consent-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .lead-form .consent-check {
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .lead-form-modal .consent-check {
+            color: #475569;
+        }
+
+        .consent-check input {
+            margin-top: 0.2rem;
+            flex: 0 0 auto;
+        }
+
+        .consent-check a {
+            color: inherit;
+            text-decoration: underline;
+        }
+
+        .form-status {
+            min-height: 1.25rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .form-status[data-tone="success"] {
+            color: #22c55e;
+        }
+
+        .form-status[data-tone="error"] {
+            color: #f87171;
+        }
+    `);
+
+    initializeAnalytics();
+    retryPendingLeads();
+
+    console.log('%cRentrerDesMandats', 'font-size: 24px; font-weight: bold; color: #0047AB;');
+    console.log('%cLanding runtime active', 'font-size: 12px; color: #666;');
+
+    async function handleLeadSubmit(event, form) {
+        event.preventDefault();
+
+        const emailInput = form.querySelector('input[type="email"]');
+        const consentInput = form.querySelector('input[name="consent"]');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const statusEl = form.querySelector('[data-form-status]');
+        const email = emailInput ? emailInput.value.trim() : '';
+
+        resetStatus(statusEl);
+
+        if (!email || !isValidEmail(email)) {
+            shakeElement(emailInput);
+            updateStatus(statusEl, "Saisissez un email valide pour recevoir le guide.", 'error');
+            return;
+        }
+
+        if (!consentInput || !consentInput.checked) {
+            shakeElement(consentInput);
+            updateStatus(statusEl, "Le consentement email est requis pour envoyer le guide.", 'error');
+            return;
+        }
+
+        const originalButtonHtml = submitButton ? submitButton.innerHTML : '';
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span>Envoi en cours...</span>';
+        }
+
+        const payload = {
+            email,
+            source: form.id === 'leadFormModal' ? 'landing-modal' : 'landing-inline',
+            timestamp: new Date().toISOString(),
+            consent: {
+                accepted: true,
+                acceptedAt: new Date().toISOString(),
+                version: CONFIG.consentVersion,
+                text: CONSENT_TEXT
+            },
+            page_url: window.location.href,
+            user_agent: navigator.userAgent
+        };
+
+        try {
+            const response = await fetch(CONFIG.webhookLeadUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error('Webhook error');
+            }
+
+            onLeadCaptured(form, emailInput, consentInput, statusEl, payload);
+        } catch (error) {
+            console.error('Lead submission error:', error);
+            storeLeadLocally(payload);
+            onLeadCaptured(form, emailInput, consentInput, statusEl, payload);
+            updateStatus(statusEl, "Le guide est en file d'envoi. Si besoin, contactez le support.", 'success');
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonHtml;
+            }
+        }
+    }
+
+    function onLeadCaptured(form, emailInput, consentInput, statusEl, payload) {
+        if (emailInput) {
+            emailInput.value = '';
+        }
+
+        if (consentInput) {
+            consentInput.checked = false;
+        }
+
+        if (form.id === 'leadFormModal' && typeof window.closeLeadModal === 'function') {
+            window.closeLeadModal();
+        }
+
+        updateStatus(statusEl, 'Demande envoyee. Verifiez votre boite mail.', 'success');
+        showModal();
+        trackEvent('lead_captured', {
+            email_domain: payload.email.split('@')[1] || '',
+            source: payload.source,
+            consent_version: payload.consent.version
         });
+    }
+
+    function getLivePaymentLink() {
+        if (!CONFIG.stripePaymentLink) {
+            return '';
+        }
+
+        return /^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]+/.test(CONFIG.stripePaymentLink)
+            ? CONFIG.stripePaymentLink
+            : '';
+    }
+
+    function getSupportMailto() {
+        const supportEmail = CONFIG.supportEmail || 'contact@rentrerdesmandats.fr';
+        const subject = encodeURIComponent('Demande de lien de paiement - Kit RentrerDesMandats 2026');
+        const body = encodeURIComponent("Bonjour,\n\nJe souhaite recevoir le lien de paiement du Kit RentrerDesMandats 2026 au tarif de lancement 67 EUR si l'offre est encore active.\n\nMerci.");
+        return `mailto:${supportEmail}?subject=${subject}&body=${body}`;
+    }
+
+    function getButtonPrice(button) {
+        const rawPrice = button.getAttribute('data-price-eur');
+        const parsedPrice = Number.parseFloat(rawPrice || '');
+        return Number.isFinite(parsedPrice) ? parsedPrice : 0;
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function shakeElement(element) {
+        if (!element) {
+            return;
+        }
+
+        element.style.animation = 'shake 0.5s ease';
+        element.style.borderColor = '#ff6b6b';
+
+        window.setTimeout(function () {
+            element.style.animation = '';
+            element.style.borderColor = '';
+        }, 500);
+    }
+
+    function updateStatus(statusEl, message, tone) {
+        if (!statusEl) {
+            return;
+        }
+
+        statusEl.textContent = message;
+        statusEl.dataset.tone = tone;
+    }
+
+    function resetStatus(statusEl) {
+        if (!statusEl) {
+            return;
+        }
+
+        statusEl.textContent = '';
+        statusEl.dataset.tone = '';
+    }
+
+    function storeLeadLocally(payload) {
+        const leads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
+        leads.push(payload);
         localStorage.setItem('pending_leads', JSON.stringify(leads));
     }
 
-    function trackEvent(eventName, eventData = {}) {
-        // Google Analytics 4
-        if (typeof gtag !== 'undefined') {
-            gtag('event', eventName, eventData);
-        }
-        
-        // Facebook Pixel
-        if (typeof fbq !== 'undefined') {
-            fbq('track', eventName, eventData);
-        }
-        
-        // Console log pour debug
-        console.log('Event tracked:', eventName, eventData);
-    }
-
-    // === RETRY PENDING LEADS ===
     async function retryPendingLeads() {
         const leads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
-        
-        if (leads.length === 0) return;
-        
-        const successfulIndices = [];
-        
-        for (let i = 0; i < leads.length; i++) {
+        if (!leads.length) {
+            return;
+        }
+
+        const remainingLeads = [];
+
+        for (const lead of leads) {
             try {
                 const response = await fetch(CONFIG.webhookLeadUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        email: leads[i].email,
-                        source: 'landing-page-retry',
-                        timestamp: leads[i].timestamp,
-                        retry_at: new Date().toISOString()
+                        ...lead,
+                        retry_at: new Date().toISOString(),
+                        source: `${lead.source || 'landing-page'}-retry`
                     })
                 });
-                
-                if (response.ok) {
-                    successfulIndices.push(i);
+
+                if (!response.ok) {
+                    throw new Error('Retry failed');
                 }
             } catch (error) {
-                console.log('Retry failed for:', leads[i].email);
+                remainingLeads.push(lead);
             }
         }
-        
-        // Remove successful leads
-        const remainingLeads = leads.filter((_, index) => !successfulIndices.includes(index));
+
         localStorage.setItem('pending_leads', JSON.stringify(remainingLeads));
     }
 
-    // Retry on page load
-    retryPendingLeads();
+    function trackEvent(eventName, eventData) {
+        if (typeof window.gtag !== 'undefined') {
+            window.gtag('event', eventName, eventData);
+        }
 
-    // === COUNTDOWN TIMER (Optional - uncomment if needed) ===
-    /*
-    function initCountdown(targetDate) {
-        const countdownEl = document.getElementById('countdown');
-        if (!countdownEl) return;
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const target = new Date(targetDate).getTime();
-            const diff = target - now;
-            
-            if (diff <= 0) {
-                countdownEl.innerHTML = 'Offre expirée';
+        if (typeof window.plausible === 'function') {
+            window.plausible(eventName, { props: normalizeAnalyticsProps(eventData) });
+        }
+
+        if (typeof window.fbq !== 'undefined') {
+            window.fbq('trackCustom', eventName, eventData);
+        }
+
+        console.log('Event tracked:', eventName, eventData);
+    }
+
+    function injectStyle(cssText) {
+        const style = document.createElement('style');
+        style.textContent = cssText;
+        document.head.appendChild(style);
+    }
+
+    function initializeAnalytics() {
+        const analytics = CONFIG.analytics || {};
+        const provider = String(analytics.provider || '').toLowerCase();
+
+        if (provider === 'plausible') {
+            loadPlausible(analytics);
+            return;
+        }
+
+        if (provider === 'ga4') {
+            loadGa4(analytics);
+        }
+    }
+
+    function loadPlausible(analytics) {
+        if (!analytics.plausibleDomain) {
+            console.warn('Plausible analytics skipped: missing domain.');
+            return;
+        }
+
+        if (document.querySelector('script[data-rdm-analytics="plausible"]')) {
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.defer = true;
+        script.dataset.domain = analytics.plausibleDomain;
+        script.dataset.rdmAnalytics = 'plausible';
+        script.src = analytics.plausibleScriptUrl || 'https://plausible.io/js/script.js';
+        document.head.appendChild(script);
+    }
+
+    function loadGa4(analytics) {
+        if (!analytics.gaMeasurementId) {
+            console.warn('GA4 analytics skipped: missing measurement ID.');
+            return;
+        }
+
+        if (document.querySelector('script[data-rdm-analytics="ga4-loader"]')) {
+            return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () {
+            window.dataLayer.push(arguments);
+        };
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.dataset.rdmAnalytics = 'ga4-loader';
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analytics.gaMeasurementId)}`;
+        document.head.appendChild(script);
+
+        window.gtag('js', new Date());
+        window.gtag('config', analytics.gaMeasurementId, {
+            anonymize_ip: true
+        });
+    }
+
+    function normalizeAnalyticsProps(eventData) {
+        const props = {};
+
+        Object.entries(eventData || {}).forEach(function ([key, value]) {
+            if (value === null || typeof value === 'undefined') {
                 return;
             }
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            countdownEl.innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
-        }
-        
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+
+            props[key] = typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                ? value
+                : JSON.stringify(value);
+        });
+
+        return props;
     }
-    
-    // Uncomment and set target date if needed:
-    // initCountdown('2026-08-11T00:00:00');
-    */
-
-    // === CONSOLE BRANDING ===
-    console.log('%c🏠 RentrerDesMandats', 'font-size: 24px; font-weight: bold; color: #0047AB;');
-    console.log('%cKit Mandataire 2026 - Landing Page', 'font-size: 12px; color: #666;');
-
 });
