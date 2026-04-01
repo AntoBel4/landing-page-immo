@@ -991,7 +991,7 @@ h6 {
 
 .play-button {
     position: absolute;
-    top: 50%;
+    top: 38%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80px;
@@ -1002,28 +1002,61 @@ h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    color: var(--color-accent);
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 
-.play-button svg {
-    color: #3B82F6;
-    width: 32px;
-    height: 32px;
-    margin-left: 4px;
-    /* Centrage visuel du triangle */
-    transition: transform var(--transition-fast);
+.video-kicker {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.video-label {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    width: min(88%, 640px);
+    padding: 1.1rem 1.2rem;
+    border-radius: var(--radius-lg);
+    background: rgba(10, 14, 39, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    color: rgba(255, 255, 255, 0.92);
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.7;
+    z-index: 1;
+}
+
+.video-label strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--color-white);
+    font-size: 1.1rem;
 }
 
 .video-placeholder:hover .play-button {
-    transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.08);
     background: #FFFFFF;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-}
-
-.video-placeholder:hover .play-button svg {
-    transform: scale(1.1);
 }
 
 /* Mobile - Video reste imposante */
@@ -1035,11 +1068,20 @@ h6 {
     .play-button {
         width: 64px;
         height: 64px;
+        top: 34%;
+        font-size: 1.4rem;
     }
 
-    .play-button svg {
-        width: 24px;
-        height: 24px;
+    .video-kicker {
+        top: 1rem;
+        left: 1rem;
+    }
+
+    .video-label {
+        bottom: 1rem;
+        width: calc(100% - 1.5rem);
+        padding: 0.9rem 1rem;
+        font-size: 0.92rem;
     }
 }
 
@@ -1573,6 +1615,14 @@ h6 {
     color: var(--color-accent-dark);
 }
 
+.seo-support-copy {
+    max-width: 760px;
+    margin: var(--space-md) auto 0;
+    text-align: center;
+    color: var(--color-text-light);
+    font-size: 0.98rem;
+}
+
 /* === FAQ SECTION === */
 .faq {
     padding: var(--space-2xl) 0;
@@ -1735,7 +1785,7 @@ h6 {
 }
 /* === MOBILE OPTIMIZATION === */
 @media (max-width: 768px) {
-    /* Espacements réduits mais lisibles */
+    /* Espacements rÃ©duits mais lisibles */
     :root {
         --space-xl: 3rem;
         --space-2xl: 4rem;
@@ -1799,7 +1849,7 @@ h6 {
     }
 }
 
-/* Reduce motion pour accessibilité */
+/* Reduce motion pour accessibilitÃ© */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1814,7 +1864,7 @@ h6 {
 /* === HIERARCHY REFINEMENT (MOBILE) === */
 @media (max-width: 640px) {
     .container {
-        padding-left: 1rem; /* 16px padding latéral */
+        padding-left: 1rem; /* 16px padding latÃ©ral */
         padding-right: 1rem;
     }
 
@@ -1884,4 +1934,3 @@ h6 {
 .footer-links a:hover {
     color: #FFFFFF !important; /* Blanc au survol */
 }
-
