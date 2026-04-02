@@ -404,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        if (!values.utm_source && document.referrer) {
+        if (document.referrer) {
             values.referrer_host = getHostFromUrl(document.referrer);
         }
 
