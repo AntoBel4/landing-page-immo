@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const header = document.querySelector('.header');
     const buyButton = document.getElementById('buyButton');
     const successModal = document.getElementById('successModal');
+    const landingAttribution = initializeAttribution();
 
     window.closeModal = function () {
         if (successModal) {
@@ -111,7 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (livePaymentLink) {
             buyButton.href = livePaymentLink;
             buyButton.addEventListener('click', function () {
-                trackEvent('buy_button_clicked', { price: getButtonPrice(buyButton) });
+                trackEvent('buy_button_clicked', {
+                    price: getButtonPrice(buyButton),
+                    destination: 'stripe_payment_link',
+                    ...getAnalyticsAttribution()
+                });
             });
         } else {
             const supportMailto = getSupportMailto();
@@ -270,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
             email,
             source: form.id === 'leadFormModal' ? 'landing-modal' : 'landing-inline',
             timestamp: new Date().toISOString(),
+            attribution: getLeadAttributionPayload(),
             consent: {
                 accepted: true,
                 acceptedAt: new Date().toISOString(),
@@ -323,7 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
         trackEvent('lead_captured', {
             email_domain: payload.email.split('@')[1] || '',
             source: payload.source,
-            consent_version: payload.consent.version
+            consent_version: payload.consent.version,
+            ...getAnalyticsAttribution()
         });
     }
 
@@ -352,6 +359,91 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function initializeAttribution() {
+        const sessionKey = 'rdm_attribution_v1';
+        const existing = readStoredAttribution(sessionKey);
+        const currentTouch = extractAttributionFromLocation();
+        const sessionId = existing.session_id || generateSessionId();
+        const landingPath = `${window.location.pathname}${window.location.hash || ''}`;
+
+        const nextAttribution = {
+            session_id: sessionId,
+            first_touch_url: existing.first_touch_url || window.location.href,
+            first_referrer: existing.first_referrer || document.referrer || '',
+            first_touch_at: existing.first_touch_at || new Date().toISOString(),
+            latest_touch_url: window.location.href,
+            latest_referrer: document.referrer || '',
+            landing_path: landingPath,
+            ...existing,
+            ...currentTouch
+        };
+
+        sessionStorage.setItem(sessionKey, JSON.stringify(nextAttribution));
+        return nextAttribution;
+    }
+
+    function readStoredAttribution(sessionKey) {
+        try {
+            return JSON.parse(sessionStorage.getItem(sessionKey) || '{}');
+        } catch (error) {
+            return {};
+        }
+    }
+
+    function extractAttributionFromLocation() {
+        const params = new URLSearchParams(window.location.search);
+        const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        const values = {};
+
+        utmKeys.forEach(function (key) {
+            const value = params.get(key);
+            if (value) {
+                values[key] = value;
+            }
+        });
+
+        if (!values.utm_source && document.referrer) {
+            values.referrer_host = getHostFromUrl(document.referrer);
+        }
+
+        return values;
+    }
+
+    function getHostFromUrl(url) {
+        try {
+            return new URL(url).hostname;
+        } catch (error) {
+            return '';
+        }
+    }
+
+    function generateSessionId() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return window.crypto.randomUUID();
+        }
+
+        return `rdm-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+    }
+
+    function getLeadAttributionPayload() {
+        return {
+            ...landingAttribution,
+            latest_touch_at: new Date().toISOString()
+        };
+    }
+
+    function getAnalyticsAttribution() {
+        return normalizeAnalyticsProps({
+            utm_source: landingAttribution.utm_source || '',
+            utm_medium: landingAttribution.utm_medium || '',
+            utm_campaign: landingAttribution.utm_campaign || '',
+            utm_content: landingAttribution.utm_content || '',
+            utm_term: landingAttribution.utm_term || '',
+            referrer_host: landingAttribution.referrer_host || getHostFromUrl(landingAttribution.latest_referrer || ''),
+            session_id: landingAttribution.session_id || ''
+        });
     }
 
     function shakeElement(element) {
