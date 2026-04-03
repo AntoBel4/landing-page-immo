@@ -17,7 +17,7 @@ landing-page/
 │   └── mockup-kit.png
 └── downloads/              ← À créer : fichiers téléchargeables
     ├── a7x9k2m4/           ← Dossier avec nom aléatoire (sécurité)
-    │   └── lead-magnet-v3.pdf
+    │   └── kit-mandataire-2026-free.pdf
     └── b8y2l5n6/
         └── Kit_Mandataire_2026_PRO.zip
 ```
@@ -132,7 +132,7 @@ analytics: {
 ## 🔧 ÉTAPE 5 : URLs des fichiers téléchargeables
 
 ### PDF Gratuit (Lead Magnet)
-URL : `https://rentrerdesmandats.fr/downloads/a7x9k2m4/lead-magnet-v3.pdf`
+URL : `https://rentrerdesmandats.fr/assets/kit-mandataire-2026-free.pdf`
 
 ### ZIP Payant (Kit)
 URL : `https://rentrerdesmandats.fr/downloads/b8y2l5n6/Kit_Mandataire_2026_PRO.zip`
@@ -164,7 +164,7 @@ Crée un nouveau workflow dans n8n avec :
 - To : `{{ $json.email }}`
 - Template ID : [Ton template "Voici votre PDF"]
 - Params : 
-  - download_url : "https://rentrerdesmandats.fr/downloads/a7x9k2m4/lead-magnet-v3.pdf"
+  - download_url : "https://rentrerdesmandats.fr/assets/kit-mandataire-2026-free.pdf"
 
 ---
 

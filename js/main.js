@@ -276,15 +276,19 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (!response.ok) {
-                throw new Error('Webhook error');
+                throw new Error(`Webhook error: ${response.status}`);
             }
 
             onLeadCaptured(form, emailInput, consentInput, statusEl, payload);
         } catch (error) {
             console.error('Lead submission error:', error);
             storeLeadLocally(payload);
-            onLeadCaptured(form, emailInput, consentInput, statusEl, payload);
-            updateStatus(statusEl, "Le guide est en file d'envoi. Si besoin, contactez le support.", 'success');
+            updateStatus(statusEl, "L'inscription n'a pas pu etre envoyee pour l'instant. Reessayez dans quelques minutes ou contactez le support.", 'error');
+            trackEvent('lead_capture_failed', {
+                source: payload.source,
+                reason: String(error && error.message ? error.message : 'unknown_error'),
+                ...getAnalyticsAttribution()
+            });
         } finally {
             if (submitButton) {
                 submitButton.disabled = false;
