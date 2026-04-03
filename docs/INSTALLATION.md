@@ -135,7 +135,7 @@ analytics: {
 URL : `https://rentrerdesmandats.fr/assets/kit-mandataire-2026-free.pdf`
 
 ### ZIP Payant (Kit)
-URL : `https://raw.githubusercontent.com/AntoBel4/landing-page-immo/main/downloads/kit-mandataire-2026.zip`
+URL : `https://n8n.rentrerdesmandats.fr/webhook/kit-mandataire-2026-zip`
 
 > 💡 Change les noms de dossiers (`a7x9k2m4`, `b8y2l5n6`) par des chaînes aléatoires 
 > de ton choix pour éviter les accès non autorisés.
@@ -188,7 +188,7 @@ Crée un nouveau workflow dans n8n avec :
 ### Nœud 4 : Brevo (Send Email)
 - Template : "Merci pour votre achat"
 - Params :
-  - download_url : "https://raw.githubusercontent.com/AntoBel4/landing-page-immo/main/downloads/kit-mandataire-2026.zip"
+  - download_url : "https://n8n.rentrerdesmandats.fr/webhook/kit-mandataire-2026-zip"
 
 ---
 
