@@ -169,24 +169,6 @@ document.addEventListener('DOMContentLoaded', function () {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         }
 
-        .hero-packaging {
-            max-width: 760px;
-            margin: -0.5rem auto 2rem;
-            text-align: center;
-            color: #334155;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        .video-label {
-            margin-top: 1rem;
-            max-width: 20rem;
-            text-align: center;
-            color: #0f172a;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
         .pricing-disclaimer {
             margin-top: 1rem;
             font-size: 0.9rem;
