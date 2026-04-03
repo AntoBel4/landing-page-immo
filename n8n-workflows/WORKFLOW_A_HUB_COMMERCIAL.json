@@ -277,7 +277,7 @@
             "parameter": [
               {
                 "key": "download_url",
-                "value": "https://rentrerdesmandats.fr/downloads/Kit_Mandataire_2026_PRO.zip"
+                "value": "https://raw.githubusercontent.com/AntoBel4/landing-page-immo/main/downloads/kit-mandataire-2026.zip"
               },
               {
                 "key": "prenom",
