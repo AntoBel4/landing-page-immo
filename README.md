@@ -1,13 +1,13 @@
 # Kit RentrerDesMandats 2026 - Landing Page High Conversion
 
-**Version :** 1.0 (Tech Premium 2026 Release)  
-**Dernière mise à jour :** Janvier 2026
+**Version :** 1.1 (Live Funnel Execution Baseline)  
+**Dernière mise à jour :** Avril 2026
 
 ---
 
 ## 🎯 Objectif
-Cette landing page a pour but unique de **vendre un kit + formation de conformité commerciale à 67€ jusqu'au 1er juillet 2026, puis 97€** pour les agents immobiliers et mandataires.
-L'angle marketing principal est d'aider à continuer à rentrer des mandats plus legalement apres la **Loi du 11 aout 2026** avec une methode plus conforme et tracable.
+Cette landing page a pour but unique de **convertir un trafic SEO, social et email en leads puis en achats** du kit + formation de conformité commerciale à **67€ jusqu'au 1er juillet 2026, puis 97€** pour les agents immobiliers et mandataires.
+L'angle marketing principal est d'aider à continuer à rentrer des mandats plus légalement après la **Loi du 11 août 2026** avec une méthode plus conforme et traçable.
 
 ---
 
@@ -58,12 +58,18 @@ Le guide gratuit ("5 Stratégies IA pour rentrer des mandats") est généré à 
 La V1 est prête visuellement et structurellement. Voici les actions pour le lancement :
 
 *   [x] **Paiement Stripe** : Injecter le lien de paiement Stripe live dans la configuration runtime de `index.html`.
-*   [ ] **Capture Email (Auto-répondeur)** : Connecter le formulaire `#leadForm` à votre outil (Systeme.io, Mailchimp, ConvertKit) ou via un Webhook n8n.
-*   [ ] **Hébergement** : Mettre le dossier `landing-page-immo` en ligne.
-    *   *Recommandé* : Vercel ou Netlify (Gratuit et rapide pour du statique).
-    *   *Alternative* : Hostinger ou tout hébergeur PHP/HTML classique (via FTP).
+*   [x] **Capture Email (Auto-répondeur)** : Le formulaire pointe vers le webhook live `n8n.rentrerdesmandats.fr/webhook/lead-capture`.
+*   [x] **Hébergement** : La base live `rentrerdesmandats.fr` est considérée comme la référence d'exécution.
 *   [x] **Analytics runtime** : Le chargement Plausible / GA4 est maintenant pilote par `window.__RDM_CONFIG.analytics` dans `index.html`.
-*   [ ] **Analytics live** : Verifier en production que Plausible ou GA4 remonte bien `buy_button_clicked` et `lead_captured`.
+*   [ ] **Analytics live** : Vérifier en production que Plausible ou GA4 remonte bien `buy_button_clicked` et `lead_captured`.
+*   [ ] **Brevo runtime** : Mapper la séquence email canonique et ses triggers dans Brevo / n8n.
+*   [ ] **Reporting launch** : Suivre hebdomadairement leads, conversion checklist, conversion achat et CTR email.
+
+## 📚 Docs d'exécution
+
+- `docs/SEO_ON_PAGE_EXECUTION_2026-04.md` : plan et checklist SEO appliqués sur la page live
+- `docs/CALENDRIER_EDITORIAL_3_SEMAINES.md` : calendrier détaillé Facebook / LinkedIn / Instagram
+- `docs/EMAIL_SEQUENCE_CANON_2026.md` : séquence Brevo, logique de déclenchement et KPI cibles
 
 ### Configuration runtime actuelle
 

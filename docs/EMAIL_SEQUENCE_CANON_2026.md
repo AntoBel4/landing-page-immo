@@ -1,18 +1,55 @@
 # Sequence Email Canonique 2026
 
-Reference marketing pour le funnel RentrerDesMandats.
+Reference Brevo pour le funnel RentrerDesMandats.
+
+## Baseline
 
 - Offre: `Kit + formation de conformite commerciale pour agents immobiliers`
 - Prix: `67 EUR` jusqu'au `1er juillet 2026`, puis `97 EUR`
 - CTA lead magnet: `Recevoir la checklist gratuite`
 - CTA offre: `Acceder au kit complet - 67 EUR`
 - Guardrail: vendre une prospection plus conforme et tracable, jamais un contournement
+- Segment principal: leads ayant telecharge la checklist gratuite sans achat
+- Objectif business: transformer le lead magnet en achat du kit sous `7 jours`
+
+## Parametrage Brevo Recommande
+
+- Liste d'entree: `Leads Checklist 2026`
+- Liste de sortie achat: `Clients Kit 2026`
+- Proprietes contact minimales:
+- `SOURCE`
+- `CONSENT_VERSION`
+- `LEAD_MAGNET`
+- `FIRST_OPTIN_AT`
+- `LAST_EMAIL_STEP`
+- `PURCHASED_KIT`
+- Evenements de sortie:
+- achat Stripe confirme
+- remboursement demande
+- desinscription email
+
+## Logique De Declenchement
+
+- J0: a l'inscription `lead captured`
+- J1: `+1 jour` si `PURCHASED_KIT=false`
+- J3: `+3 jours` si `PURCHASED_KIT=false`
+- J5: `+5 jours` si `PURCHASED_KIT=false`
+- J7: `+7 jours` si `PURCHASED_KIT=false`
+- Sortie immediate de la sequence si achat
+- Handoff post-achat: envoyer vers workflow de livraison et onboarding client
+
+## URLs Et UTMs
+
+- CTA checklist: `https://rentrerdesmandats.fr/#lead-magnet?utm_source=brevo&utm_medium=email&utm_campaign=lead_nurture_2026`
+- CTA offre: `https://rentrerdesmandats.fr/#achat?utm_source=brevo&utm_medium=email&utm_campaign=lead_nurture_2026`
 
 ## Email J0
 
 - Timing: immediatement apres inscription
-- Objectif: livraison du lead magnet + cadrage du probleme
+- Objectif: livrer la checklist et cadrer la promesse
 - Sujet: `Votre checklist gratuite de transition 2026`
+- Preheader: `Les premiers leviers pour remplacer le telephone a froid avant aout 2026`
+- CTA principal: `Voir ce que contient le kit`
 
 Bonjour,
 
@@ -24,7 +61,8 @@ Dans ce guide, vous trouverez:
 - les points de vigilance sur consentement et tracabilite
 - les premiers leviers actionnables cette semaine
 
-Point important: le kit ne promet pas de contourner la loi. Il vous aide a mettre en place une methode plus conforme, documentee et exploitable.
+Point important:
+le kit ne promet pas de contourner la loi. Il vous aide a mettre en place une methode plus conforme, documentee et exploitable.
 
 Demain, je vous enverrai les 3 erreurs qui exposent le plus les agents qui attendent le dernier moment.
 
@@ -39,6 +77,8 @@ P.S. Si vous voulez voir ce que contient l'offre complete:
 - Timing: J+1
 - Objectif: education + urgence reglementaire
 - Sujet: `Les 3 erreurs qui vont couter cher aux agents en 2026`
+- Preheader: `Le probleme n'est pas l'energie. C'est le systeme d'acquisition.`
+- CTA principal: `Acceder au kit complet - 67 EUR`
 
 Bonjour,
 
@@ -47,12 +87,12 @@ Ils sont bloques par un mauvais systeme.
 
 Voici les 3 erreurs que nous voyons le plus souvent:
 
-- continuer a compter sur des relances telephoniques sans consentement traçable
+- continuer a compter sur des relances telephoniques sans consentement tracable
 - improviser des messages sans preuve de valeur ni process de suivi
 - attendre l'ete 2026 pour reconstruire toute la prospection
 
 L'enjeu n'est pas juste marketing.
-L'enjeu est de conserver une machine a mandats qui reste defendable, claire et actionnable.
+L'enjeu est de conserver une machine a mandats defendable, claire et actionnable.
 
 Le kit complet vous donne:
 
@@ -69,7 +109,9 @@ Voir le kit complet:
 
 - Timing: J+3
 - Objectif: objection handling
-- Sujet: `\"Est-ce vraiment conforme ?\"`
+- Sujet: `Est-ce vraiment conforme ?`
+- Preheader: `La bonne promesse n'est pas zero risque. C'est une meilleure methode.`
+- CTA principal: `Voir ce que contient le kit`
 
 Bonjour,
 
@@ -101,6 +143,8 @@ Si vous voulez une prospection plus serieuse avant le `11 aout 2026`, le kit a e
 - Timing: J+5
 - Objectif: rendre l'offre concrete
 - Sujet: `Ce que vous recevez exactement apres achat`
+- Preheader: `Le contenu du kit, sans flou ni bonus cosmetiques.`
+- CTA principal: `Acceder au kit complet - 67 EUR`
 
 Bonjour,
 
@@ -126,8 +170,10 @@ Prix de lancement actuel:
 ## Email J7
 
 - Timing: J+7
-- Objectif: preuve + decision
+- Objectif: decision finale
 - Sujet: `Le vrai risque n'est pas le prix du kit`
+- Preheader: `Le cout cache, c'est de reconstruire trop tard.`
+- CTA principal: `Acceder au kit complet - 67 EUR`
 
 Bonjour,
 
@@ -143,7 +189,7 @@ Le kit RentrerDesMandats 2026 a ete pense comme un raccourci vers une prospectio
 
 Si le sujet est prioritaire pour vous, ne laissez pas le chantier trainer.
 
-Acces immediate:
+Acces immediat:
 `Acceder au kit complet - 67 EUR`
 
 Rappel:
@@ -152,3 +198,20 @@ Rappel:
 - prix de lancement: `67 EUR` jusqu'au `1er juillet 2026`
 
 L'equipe RentrerDesMandats
+
+## KPI Cibles
+
+- J0 open rate: `55%+`
+- J1 open rate: `42%+`
+- J3 open rate: `38%+`
+- J5 open rate: `35%+`
+- J7 open rate: `32%+`
+- CTR sequence global: `4%+`
+- Conversion lead vers achat a 7 jours: `2% a 5%` comme seuil initial de lecture
+
+## Dependances CTO
+
+- mapper les templates Brevo sur les etapes `J0/J1/J3/J5/J7`
+- injecter les UTMs dans chaque CTA
+- sortir les acheteurs de la sequence automatiquement apres webhook Stripe
+- remonter dans le reporting: `open`, `click`, `purchase`, `unsubscribe`

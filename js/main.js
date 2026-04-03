@@ -430,6 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function getLeadAttributionPayload() {
         return {
             ...landingAttribution,
+            referrer_host: landingAttribution.referrer_host || getHostFromUrl(landingAttribution.latest_referrer || ''),
             latest_touch_at: new Date().toISOString()
         };
     }
