@@ -3,53 +3,40 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP\n\n**Configuration requise :**\n- Google Sheets avec onglet 'Chasse'\n- Brevo (2 listes : Leads + Clients)\n- Stripe Webhook configuré\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
+        "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP par montant\n\n**Routing email par montant :**\n- 6 700 cts (67€)  → templateId 17\n- 29 700 cts (297€) → templateId 18 + Calendly déploiement\n- 49 700 cts (497€) → templateId 19 + Calendly premium\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
         "height": 340,
-        "width": 420
+        "width": 460
       },
       "id": "sticky-note-intro",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        140,
-        140
-      ]
+      "position": [140, 140]
     },
     {
       "parameters": {
         "httpMethod": "POST",
         "path": "lead-capture",
-        "options": {
-          "responseMode": "onReceived"
-        }
+        "options": { "responseMode": "onReceived" }
       },
       "id": "webhook-landing",
       "name": "🔗 Webhook Landing Page",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
-      "position": [
-        640,
-        240
-      ],
+      "position": [640, 240],
       "webhookId": "lead-capture-rdm"
     },
     {
       "parameters": {
         "httpMethod": "POST",
         "path": "stripe-webhook",
-        "options": {
-          "responseMode": "onReceived"
-        }
+        "options": { "responseMode": "onReceived" }
       },
       "id": "webhook-stripe",
       "name": "💳 Webhook Stripe",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
-      "position": [
-        640,
-        580
-      ],
+      "position": [640, 580],
       "webhookId": "stripe-success-rdm"
     },
     {
@@ -68,10 +55,7 @@
       "name": "✅ IF Checkout Completed",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [
-        880,
-        580
-      ]
+      "position": [880, 580]
     },
     {
       "parameters": {
@@ -102,10 +86,7 @@
       "name": "📊 GSheet - Ajouter Lead",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
-      "position": [
-        920,
-        160
-      ],
+      "position": [920, 160],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "8vezCiZx27e3mF7R",
@@ -118,19 +99,11 @@
         "operation": "create",
         "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
         "additionalFields": {
-          "listIds": [
-            "3"
-          ],
+          "listIds": ["3"],
           "attributes": {
             "attribute": [
-              {
-                "key": "SOURCE",
-                "value": "landing-page"
-              },
-              {
-                "key": "DATE_INSCRIPTION",
-                "value": "={{ $now.format('YYYY-MM-DD') }}"
-              }
+              { "key": "SOURCE", "value": "landing-page" },
+              { "key": "DATE_INSCRIPTION", "value": "={{ $now.format('YYYY-MM-DD') }}" }
             ]
           },
           "updateEnabled": true
@@ -140,10 +113,7 @@
       "name": "📧 Brevo - Créer Contact Lead",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        920,
-        320
-      ],
+      "position": [920, 320],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
@@ -174,10 +144,7 @@
       "name": "📨 Brevo - Envoyer PDF Gratuit",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        1180,
-        320
-      ],
+      "position": [1180, 320],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
@@ -195,23 +162,17 @@
       "name": "✅ Répondre OK Landing",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [
-        1440,
-        240
-      ]
+      "position": [1440, 240]
     },
     {
       "parameters": {
-        "jsCode": "// Extraction données Stripe\nconst stripeData = $input.item.json.body.data.object;\n\nreturn {\n  email: stripeData.customer_details?.email || stripeData.customer_email,\n  name: stripeData.customer_details?.name || '',\n  amount: (stripeData.amount_total / 100).toFixed(2),\n  currency: stripeData.currency?.toUpperCase() || 'EUR',\n  payment_id: stripeData.id,\n  payment_status: stripeData.payment_status,\n  timestamp: new Date().toISOString()\n};"
+        "jsCode": "// Extraction données Stripe\nconst stripeData = $input.item.json.body.data.object;\n\nreturn {\n  email: stripeData.customer_details?.email || stripeData.customer_email,\n  name: stripeData.customer_details?.name || '',\n  prenom: (stripeData.customer_details?.name || '').split(' ')[0] || 'là',\n  amount: (stripeData.amount_total / 100).toFixed(2),\n  amount_raw: stripeData.amount_total,\n  currency: stripeData.currency?.toUpperCase() || 'EUR',\n  payment_id: stripeData.id,\n  payment_status: stripeData.payment_status,\n  timestamp: new Date().toISOString()\n};"
       },
       "id": "extract-stripe-data",
       "name": "🔧 Extraire Données Stripe",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1140,
-        480
-      ]
+      "position": [1140, 480]
     },
     {
       "parameters": {
@@ -249,10 +210,7 @@
       "name": "📊 GSheet - Passer en CLIENT",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
-      "position": [
-        1400,
-        400
-      ],
+      "position": [1400, 400],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "8vezCiZx27e3mF7R",
@@ -265,26 +223,14 @@
         "operation": "update",
         "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
         "additionalFields": {
-          "listIds": [
-            "4"
-          ],
-          "unlinkListIds": [
-            "3"
-          ],
+          "listIds": ["4"],
+          "unlinkListIds": ["3"],
           "attributes": {
             "attribute": [
-              {
-                "key": "DATE_ACHAT",
-                "value": "={{ $now.format('YYYY-MM-DD') }}"
-              },
-              {
-                "key": "MONTANT_ACHAT",
-                "value": "={{ $('🔧 Extraire Données Stripe').item.json.amount }}"
-              },
-              {
-                "key": "STATUT",
-                "value": "CLIENT"
-              }
+              { "key": "DATE_ACHAT", "value": "={{ $now.format('YYYY-MM-DD') }}" },
+              { "key": "MONTANT_ACHAT", "value": "={{ $('🔧 Extraire Données Stripe').item.json.amount }}" },
+              { "key": "STATUT", "value": "CLIENT" },
+              { "key": "PRENOM", "value": "={{ $('🔧 Extraire Données Stripe').item.json.prenom }}" }
             ]
           }
         }
@@ -293,16 +239,72 @@
       "name": "📧 Brevo - Migrer vers Clients",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        1400,
-        560
-      ],
+      "position": [1400, 560],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
           "name": "Brevo RentrerDesMandats"
         }
       }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.amount_raw }}",
+                    "rightValue": 6700,
+                    "operator": { "type": "number", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kit67"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.amount_raw }}",
+                    "rightValue": 29700,
+                    "operator": { "type": "number", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kit297"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.amount_raw }}",
+                    "rightValue": 49700,
+                    "operator": { "type": "number", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "kit497"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "switch-montant",
+      "name": "💰 Switch - Montant Achat",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1660, 460]
     },
     {
       "parameters": {
@@ -319,172 +321,25 @@
               },
               {
                 "key": "prenom",
-                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] || 'là' }}"
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.prenom }}"
               }
             ]
           },
-          "senderEmail": "contact@rentrerdesmandats.fr",
-          "senderName": "RentrerDesMandats"
+          "senderEmail": "commande@rentrerdesmandats.fr",
+          "senderName": "Antoine — RentrerDesMandats"
         }
       },
       "id": "brevo-send-kit",
-      "name": "📨 Brevo - Livrer Kit ZIP",
+      "name": "📨 Brevo - Livrer Kit ZIP (67€)",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        1660,
-        560
-      ],
+      "position": [1920, 340],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
           "name": "Brevo RentrerDesMandats"
         }
       }
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ received: true }) }}",
-        "options": {}
-      },
-      "id": "respond-stripe-success",
-      "name": "✅ Répondre OK Stripe",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [
-        1920,
-        560
-      ]
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ received: true, ignored: true }) }}",
-        "options": {}
-      },
-      "id": "respond-stripe-ignored",
-      "name": "⏭️ Répondre OK (Event Ignoré)",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
-      "position": [
-        1140,
-        720
-      ]
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.error }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "exists",
-                      "singleValue": true
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "hasError"
-            }
-          ]
-        },
-        "options": {
-          "fallbackOutput": "extra"
-        }
-      },
-      "id": "error-handler-landing",
-      "name": "⚠️ Error Handler Landing",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [
-        1180,
-        80
-      ]
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "jsonOutput": "={{ { error: 'Erreur lors du traitement du lead', details: $json, timestamp: $now.toISO() } }}",
-        "options": {}
-      },
-      "id": "log-error-landing",
-      "name": "📝 Log Erreur Landing",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.2,
-      "position": [
-        1440,
-        80
-      ]
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict"
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $json.error }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "exists",
-                      "singleValue": true
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "hasError"
-            }
-          ]
-        },
-        "options": {
-          "fallbackOutput": "extra"
-        }
-      },
-      "id": "error-handler-stripe",
-      "name": "⚠️ Error Handler Stripe",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [
-        1660,
-        720
-      ]
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "jsonOutput": "={{ { error: 'Erreur lors du traitement Stripe', details: $json, timestamp: $now.toISO() } }}",
-        "options": {}
-      },
-      "id": "log-error-stripe",
-      "name": "📝 Log Erreur Stripe",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.2,
-      "position": [
-        1920,
-        720
-      ]
     },
     {
       "parameters": {
@@ -500,7 +355,7 @@
               },
               {
                 "key": "prenom",
-                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] }}"
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.prenom }}"
               },
               {
                 "key": "unsubscribe_url",
@@ -517,13 +372,10 @@
         }
       },
       "id": "brevo-livrer-kit-297",
-      "name": "📨 Brevo - Livrer Kit Deploiement 297€",
+      "name": "📨 Brevo - Livrer Kit Deploiement (297€)",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        1660,
-        740
-      ],
+      "position": [1920, 520],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
@@ -545,7 +397,7 @@
               },
               {
                 "key": "prenom",
-                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] }}"
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.prenom }}"
               },
               {
                 "key": "unsubscribe_url",
@@ -562,13 +414,10 @@
         }
       },
       "id": "brevo-livrer-kit-497",
-      "name": "📨 Brevo - Livrer Kit Premium 497€",
+      "name": "📨 Brevo - Livrer Kit Premium (497€)",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [
-        1660,
-        920
-      ],
+      "position": [1920, 700],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
@@ -578,195 +427,236 @@
     },
     {
       "parameters": {
-        "content": "## Routing par montant Stripe\n\n- amount = 6700 (67€) → templateId 17\n- amount = 29700 (297€) → templateId 18 + Calendly\n- amount = 49700 (497€) → templateId 19 + Calendly\n\n⚠️ Connecter ces nœuds à un Switch sur `amount` issu de \"Extraire Données Stripe\".",
-        "height": 220,
-        "width": 380,
-        "color": 4
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ received: true }) }}",
+        "options": {}
       },
-      "id": "sticky-email-routing",
-      "name": "Note - Routing Emails par Montant",
-      "type": "n8n-nodes-base.stickyNote",
+      "id": "respond-stripe-success",
+      "name": "✅ Répondre OK Stripe",
+      "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [
-        1240,
-        740
-      ]
+      "position": [2440, 520]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ received: true, ignored: true }) }}",
+        "options": {}
+      },
+      "id": "respond-stripe-ignored",
+      "name": "⏭️ Répondre OK (Event Ignoré)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1140, 720]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "",
+                    "operator": { "type": "string", "operation": "exists", "singleValue": true }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hasError"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "error-handler-landing",
+      "name": "⚠️ Error Handler Landing",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1180, 80]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { error: 'Erreur lors du traitement du lead', details: $json, timestamp: $now.toISO() } }}",
+        "options": {}
+      },
+      "id": "log-error-landing",
+      "name": "📝 Log Erreur Landing",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [1440, 80]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.error }}",
+                    "rightValue": "",
+                    "operator": { "type": "string", "operation": "exists", "singleValue": true }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hasError"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "error-handler-stripe",
+      "name": "⚠️ Error Handler Stripe",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [2180, 520]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { error: 'Erreur lors du traitement Stripe', details: $json, timestamp: $now.toISO() } }}",
+        "options": {}
+      },
+      "id": "log-error-stripe",
+      "name": "📝 Log Erreur Stripe",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [2440, 680]
     }
   ],
   "connections": {
     "🔗 Webhook Landing Page": {
       "main": [
         [
-          {
-            "node": "📊 GSheet - Ajouter Lead",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "📧 Brevo - Créer Contact Lead",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📊 GSheet - Ajouter Lead", "type": "main", "index": 0 },
+          { "node": "📧 Brevo - Créer Contact Lead", "type": "main", "index": 0 }
         ]
       ]
     },
     "📧 Brevo - Créer Contact Lead": {
       "main": [
         [
-          {
-            "node": "📨 Brevo - Envoyer PDF Gratuit",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📨 Brevo - Envoyer PDF Gratuit", "type": "main", "index": 0 }
         ]
       ]
     },
     "📨 Brevo - Envoyer PDF Gratuit": {
       "main": [
         [
-          {
-            "node": "⚠️ Error Handler Landing",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "⚠️ Error Handler Landing", "type": "main", "index": 0 }
         ]
       ]
     },
     "⚠️ Error Handler Landing": {
       "main": [
         [
-          {
-            "node": "📝 Log Erreur Landing",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📝 Log Erreur Landing", "type": "main", "index": 0 }
         ],
         [
-          {
-            "node": "✅ Répondre OK Landing",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "✅ Répondre OK Landing", "type": "main", "index": 0 }
         ]
       ]
     },
     "📝 Log Erreur Landing": {
       "main": [
         [
-          {
-            "node": "✅ Répondre OK Landing",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "✅ Répondre OK Landing", "type": "main", "index": 0 }
         ]
       ]
     },
     "💳 Webhook Stripe": {
       "main": [
         [
-          {
-            "node": "✅ IF Checkout Completed",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "✅ IF Checkout Completed", "type": "main", "index": 0 }
         ]
       ]
     },
     "✅ IF Checkout Completed": {
       "main": [
         [
-          {
-            "node": "🔧 Extraire Données Stripe",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "🔧 Extraire Données Stripe", "type": "main", "index": 0 }
         ],
         [
-          {
-            "node": "⏭️ Répondre OK (Event Ignoré)",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "⏭️ Répondre OK (Event Ignoré)", "type": "main", "index": 0 }
         ]
       ]
     },
     "🔧 Extraire Données Stripe": {
       "main": [
         [
-          {
-            "node": "📊 GSheet - Passer en CLIENT",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "📧 Brevo - Migrer vers Clients",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📊 GSheet - Passer en CLIENT", "type": "main", "index": 0 },
+          { "node": "📧 Brevo - Migrer vers Clients", "type": "main", "index": 0 }
         ]
       ]
     },
     "📧 Brevo - Migrer vers Clients": {
       "main": [
         [
-          {
-            "node": "📨 Brevo - Livrer Kit ZIP",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "💰 Switch - Montant Achat", "type": "main", "index": 0 }
         ]
       ]
     },
-    "📨 Brevo - Livrer Kit ZIP": {
+    "💰 Switch - Montant Achat": {
       "main": [
         [
-          {
-            "node": "⚠️ Error Handler Stripe",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📨 Brevo - Livrer Kit ZIP (67€)", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "📨 Brevo - Livrer Kit Deploiement (297€)", "type": "main", "index": 0 }
+        ],
+        [
+          { "node": "📨 Brevo - Livrer Kit Premium (497€)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "📨 Brevo - Livrer Kit ZIP (67€)": {
+      "main": [
+        [
+          { "node": "⚠️ Error Handler Stripe", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "📨 Brevo - Livrer Kit Deploiement (297€)": {
+      "main": [
+        [
+          { "node": "⚠️ Error Handler Stripe", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "📨 Brevo - Livrer Kit Premium (497€)": {
+      "main": [
+        [
+          { "node": "⚠️ Error Handler Stripe", "type": "main", "index": 0 }
         ]
       ]
     },
     "⚠️ Error Handler Stripe": {
       "main": [
         [
-          {
-            "node": "📝 Log Erreur Stripe",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "📝 Log Erreur Stripe", "type": "main", "index": 0 }
         ],
         [
-          {
-            "node": "✅ Répondre OK Stripe",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "✅ Répondre OK Stripe", "type": "main", "index": 0 }
         ]
       ]
     },
     "📝 Log Erreur Stripe": {
       "main": [
         [
-          {
-            "node": "✅ Répondre OK Stripe",
-            "type": "main",
-            "index": 0
-          }
+          { "node": "✅ Répondre OK Stripe", "type": "main", "index": 0 }
         ]
       ]
     },
-    "📊 GSheet - Ajouter Lead": {
-      "main": [
-        []
-      ]
-    },
-    "📊 GSheet - Passer en CLIENT": {
-      "main": [
-        []
-      ]
-    }
+    "📊 GSheet - Ajouter Lead": { "main": [[]] },
+    "📊 GSheet - Passer en CLIENT": { "main": [[]] }
   },
   "settings": {
     "executionOrder": "v1",
@@ -780,12 +670,12 @@
   "tags": [
     {
       "createdAt": "2026-01-30T00:00:00.000Z",
-      "updatedAt": "2026-01-30T00:00:00.000Z",
+      "updatedAt": "2026-04-05T00:00:00.000Z",
       "id": "rdm-hub",
       "name": "RentrerDesMandats"
     }
   ],
   "triggerCount": 2,
-  "updatedAt": "2026-01-30T00:00:00.000Z",
-  "versionId": "production-v1.0"
+  "updatedAt": "2026-04-05T00:00:00.000Z",
+  "versionId": "production-v1.1"
 }

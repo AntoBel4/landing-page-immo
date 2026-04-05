@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande confirmée — RentrerDesMandats</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+    <link rel="shortcut icon" href="/assets/favicons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+    <meta name="theme-color" content="#0A0E27">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #0A0E27;
+            --color-primary-light: #1a2248;
+            --color-accent: #1B3A8C;
+            --color-gold: #B8902A;
+            --color-gold-light: #D4AF5A;
+            --color-text: #1a1a2e;
+            --color-text-light: #4a5568;
+            --color-surface: #f7f5f0;
+            --color-off-white: #edeae3;
+            --color-white: #FFFFFF;
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Outfit', -apple-system, sans-serif;
+            --shadow-md: 0 10px 24px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 18px 40px rgba(15, 23, 42, 0.11);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .merci-card {
+            background: #fff;
+            color: var(--color-text);
+            border-radius: var(--radius-lg);
+            max-width: 640px;
+            width: 100%;
+            padding: 3rem 2.5rem;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .merci-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .merci-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .merci-icon {
+            font-size: 3.5rem;
+            line-height: 1;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 4vw, 2.1rem);
+            color: var(--color-primary);
+            line-height: 1.25;
+            margin-bottom: 1rem;
+        }
+
+        h1 span {
+            color: var(--color-gold);
+        }
+
+        .merci-intro {
+            font-size: 1.05rem;
+            color: var(--color-text-light);
+            line-height: 1.65;
+            margin-bottom: 2rem;
+        }
+
+        .steps {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .steps-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 0.875rem;
+            align-items: flex-start;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--color-off-white);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--color-primary);
+            color: var(--color-gold-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .step-body strong {
+            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text);
+            margin-bottom: 0.2rem;
+        }
+
+        .step-body span {
+            font-size: 0.88rem;
+            color: var(--color-text-light);
+            line-height: 1.5;
+        }
+
+        .cta-retour {
+            display: inline-block;
+            background: var(--color-primary);
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.85rem 2rem;
+            border-radius: 99px;
+            transition: background 0.2s ease, transform 0.15s ease;
+            margin-bottom: 1.25rem;
+        }
+
+        .cta-retour:hover {
+            background: var(--color-accent);
+            transform: translateY(-1px);
+        }
+
+        .merci-support {
+            font-size: 0.82rem;
+            color: var(--color-text-light);
+        }
+
+        .merci-support a {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .merci-support a:hover { text-decoration: underline; }
+
+        .merci-footer {
+            margin-top: 2rem;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.35);
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .merci-card { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="merci-card">
+        <div class="merci-badge">
+            <span class="dot"></span>
+            Paiement confirmé
+        </div>
+
+        <div class="merci-icon">&#127881;</div>
+
+        <h1>Bienvenue dans le kit<br><span>RentrerDesMandats 2026</span></h1>
+
+        <p class="merci-intro">
+            Votre commande est validée. Vous allez recevoir un email de confirmation
+            avec votre lien de téléchargement dans les <strong>prochaines minutes</strong>.
+            Vérifiez vos spams si besoin.
+        </p>
+
+        <div class="steps">
+            <p class="steps-title">Prochaines étapes</p>
+
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <strong>Ouvrez l'email de livraison</strong>
+                    <span>Expéditeur : commande@rentrerdesmandats.fr — il contient votre lien ZIP sécurisé.</span>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <strong>Téléchargez et décompressez le kit</strong>
+                    <span>16 fichiers opérationnels : guide, 6 assistants IA, 35 templates, registre consentements.</span>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <strong>Commencez par le Guide Conformité</strong>
+                    <span>Lisez-le en premier — il vous donne la logique globale avant d'utiliser les outils IA.</span>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-body">
+                    <strong>Accès Déploiement ou Premium ?</strong>
+                    <span>Un lien Calendly est inclus dans votre email pour réserver votre session de démarrage.</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://rentrerdesmandats.fr/" class="cta-retour">
+            Retour à l'accueil
+        </a>
+
+        <p class="merci-support">
+            Un problème ? Écrivez-nous à
+            <a href="mailto:contact@rentrerdesmandats.fr">contact@rentrerdesmandats.fr</a>
+        </p>
+    </div>
+
+    <p class="merci-footer">© 2026 RentrerDesMandats — Antoine Estarellas</p>
+
+    <script>
+        // Déclenche l'event analytics post-achat si disponible
+        if (typeof window.plausible === 'function') {
+            window.plausible('purchase_confirmed');
+        }
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', 'purchase', { event_category: 'ecommerce' });
+        }
+    </script>
+</body>
+
+</html>
