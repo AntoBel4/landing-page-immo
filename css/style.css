@@ -5,22 +5,25 @@
 
 /* === CSS VARIABLES === */
 :root {
-    --color-primary: #14213d;
-    --color-primary-dark: #0b1324;
-    --color-primary-light: #33415c;
-    --color-accent: #3657a7;
-    --color-accent-dark: #213b7d;
-    --color-accent-glow: rgba(54, 87, 167, 0.12);
+    --color-primary: #0A0E27;
+    --color-primary-dark: #06091a;
+    --color-primary-light: #1a2248;
+    --color-accent: #1B3A8C;
+    --color-accent-dark: #0f2260;
+    --color-accent-glow: rgba(27, 58, 140, 0.12);
+    --color-gold: #B8902A;
+    --color-gold-light: #D4AF5A;
+    --color-gold-glow: rgba(184, 144, 42, 0.15);
     --color-warning: #9a6b2f;
-    --color-text: #1f2937;
-    --color-text-light: #526072;
-    --color-text-muted: #7b8794;
+    --color-text: #1a1a2e;
+    --color-text-light: #4a5568;
+    --color-text-muted: #718096;
     --color-white: #FFFFFF;
-    --color-surface: #f6f1e8;
-    --color-off-white: #ede6da;
-    --color-dark: #101828;
-    --color-glass: rgba(255, 252, 246, 0.86);
-    --color-glass-border: rgba(111, 120, 134, 0.2);
+    --color-surface: #f7f5f0;
+    --color-off-white: #edeae3;
+    --color-dark: #0A0E27;
+    --color-glass: rgba(255, 253, 248, 0.88);
+    --color-glass-border: rgba(100, 110, 130, 0.18);
 
     --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
     --shadow-md: 0 10px 24px rgba(15, 23, 42, 0.08);
@@ -1677,8 +1680,10 @@ h6 {
     transition: all var(--transition-base);
 }
 
-.roi-box h3 {
+.roi-box h3,
+.roi-title {
     font-size: 1.25rem;
+    font-weight: 600;
     margin-bottom: var(--space-sm);
 }
 

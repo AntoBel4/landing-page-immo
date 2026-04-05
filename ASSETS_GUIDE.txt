@@ -1,0 +1,236 @@
+ASSETS_GUIDE.txt — Mockups Canva pour le Kit RentrerDesMandats 2026
+Généré le : avril 2026
+Usage : Créer 16 mockups de documents à insérer dans la landing page (section Value Stack et Hero visuel)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORMAT GÉNÉRAL — S'applique à tous les mockups
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Support recommandé : Mockup "document A4 posé sur bureau" ou "écran tablette" (Canva Elements > Mockups)
+Palette de couleurs :
+  - Fond sombre : #0A0E27 (bleu nuit)
+  - Accent bleu : #3B82F6
+  - Accent vert : #10B981
+  - Accent orange : #F59E0B
+  - Accent violet : #7C3AED
+  - Blanc texte : #F8FAFC
+Typographie : Outfit (Google Fonts) — titres en 800, corps en 400
+Logo à placer en bas à droite de chaque document : "RentrerDesMandats.fr"
+Taille export : 1200x900px PNG, fond transparent si possible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MODULE 1 — CONFORMITÉ EXPRESS (3 mockups)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOCKUP 1 — Guide Conformité Opt-In 2026
+Fichier source : content-sources/M1_Guide_Conformite_Opt_In_2026.html
+Format visuel : Document A4, couverture sombre (#0A0E27)
+Éléments à afficher :
+  - Badge bleu : "MODULE 1 — CONFORMITÉ EXPRESS"
+  - Titre blanc : "Guide Conformité\nOpt-In 2026"
+  - Sous-titre gris clair : "Loi 2025-594 expliquée au terrain"
+  - Pastille rouge : "14 pages"
+  - Ligne de bas de page : "RentrerDesMandats.fr — Antoine Estarellas"
+Style : Couverture style e-book professionnel, gradient léger en haut à gauche
+
+MOCKUP 2 — Formulaire Recueil de Consentement
+Fichier source : content-sources/M1_Formulaire_Recueil_Consentement.docx
+Format visuel : Document A4 blanc avec en-tête structuré
+Éléments à afficher :
+  - En-tête bleu nuit : "Formulaire de Recueil de Consentement"
+  - Sous-titre : "Conforme RGPD + Loi 2025-594"
+  - 4 blocs grisés simulant les sections du formulaire (lignes horizontales)
+  - Icône stylo ou signature en bas à droite
+  - Badge : "Imprimable"
+Style : Document officiel, lignes de formulaire visibles, look "à remplir"
+
+MOCKUP 3 — Checklist "Prêt le 11 août"
+Fichier source : content-sources/M1_Checklist_Pret_11_Aout.html
+Format visuel : Document A4 avec cases à cocher
+Éléments à afficher :
+  - Titre : "Checklist — Prêt le 11 août 2026"
+  - Pastille rouge : "11 AOÛT 2026"
+  - 5 sections avec cases à cocher simulées (rectangles vides)
+  - Barre de score en bas : "Score de conformité : ▓▓▓▓▓░░ 5/7"
+  - Badge vert : "25 points · 5 sections"
+Style : Look checklist terrain, cases carrées, couleurs de section (bleu/vert/violet/orange/rouge)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MODULE 2 — LES 6 ASSISTANTS IA (7 mockups)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOCKUP 4 — Le Démineur
+Fichier source : content-sources/M2_01_Le_Demineur_V3.txt
+Format visuel : Interface chat simulée (bulle de message)
+Éléments à afficher :
+  - Badge sombre : "ASSISTANT IA 01 — LE DÉMINEUR"
+  - Bulle de message entrant : "Annonce PAP détectée → 4 approches opt-in générées"
+  - Icônes plateforme : SMS · WhatsApp · Email · DM
+  - Titre en haut : "Analyse Annonce PAP"
+Style : Interface de chat minimaliste, fond très sombre, accent bleu
+
+MOCKUP 5 — L'Expert DPE
+Fichier source : content-sources/M2_02_Expert_DPE_V3.txt
+Format visuel : Tableau de données / fiche technique
+Éléments à afficher :
+  - Badge : "ASSISTANT IA 02 — EXPERT DPE"
+  - Barre d'énergie style DPE : A → G avec flèche sur D
+  - Texte simulé : "Gain estimé : -42% sur la facture énergétique"
+  - Logo ADEME stylisé (si possible) ou mention "Source ADEME"
+  - Icônes plateforme : SMS · WhatsApp · Email · DM
+Style : Fiche technique, données chiffrées, fond blanc avec accent vert
+
+MOCKUP 6 — Le Bouclier
+Fichier source : content-sources/M2_03_Le_Bouclier_V3.txt
+Format visuel : Carte avec objections/réponses
+Éléments à afficher :
+  - Badge : "ASSISTANT IA 03 — LE BOUCLIER"
+  - 3 lignes simulant des objections : "Je ne veux pas signer...", "C'est quoi ce formulaire...", "Pourquoi un accord écrit..."
+  - Flèche → "Réponse générée"
+  - Compteur : "5 objections couvertes"
+Style : Look "argument vs contre-argument", couleurs rouge/vert
+
+MOCKUP 7 — Le Réanimateur
+Fichier source : content-sources/M2_04_Le_Reanimateur_V3.txt
+Format visuel : Timeline de relance
+Éléments à afficher :
+  - Badge : "ASSISTANT IA 04 — LE RÉANIMATEUR"
+  - Timeline horizontale : J+2 → J+4 → J+7
+  - Icônes : SMS, Email, WhatsApp vocal
+  - Texte : "Séquence multi-canal · Zéro harcèlement"
+Style : Timeline propre, pastilles de jour, fond sombre
+
+MOCKUP 8 — Le Réalisateur
+Fichier source : content-sources/M2_05_Le_Realisateur_V3.txt
+Format visuel : Frame de smartphone (TikTok/Reels)
+Éléments à afficher :
+  - Badge : "ASSISTANT IA 05 — LE RÉALISATEUR"
+  - Simulation d'écran smartphone avec barre de lecture vidéo
+  - Texte en superposition style sous-titre : "La loi change tout pour les agents immo..."
+  - Icônes : TikTok · Reels · Shorts
+Style : Mockup téléphone vertical, look créateur de contenu
+
+MOCKUP 9 — Le Copywriter
+Fichier source : content-sources/M2_06_Le_Copywriter_V3.txt
+Format visuel : Avant/Après annonce
+Éléments à afficher :
+  - Badge : "ASSISTANT IA 06 — LE COPYWRITER"
+  - Deux colonnes : "Avant" (texte grisé barrré) / "Après" (texte propre, accentué)
+  - Icônes plateforme : LeBonCoin · SeLoger · LinkedIn
+  - Compteur : "4 variantes générées"
+Style : Comparatif avant/après, rouge pour l'avant, vert pour l'après
+
+MOCKUP 10 — Guide Installation Assistants
+Fichier source : content-sources/M2_Guide_Installation_Assistants.html
+Format visuel : Document tutoriel multi-plateformes
+Éléments à afficher :
+  - Titre : "Guide d'Installation Universel"
+  - 4 logos/icônes en rangée : ChatGPT · Claude · Gemini · Mistral
+  - Étapes numérotées : "1 · 2 · 3 · Opérationnel"
+  - Badge : "5 pages · 15 minutes"
+Style : Guide pas à pas, fond blanc, icônes colorées par plateforme
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MODULE 3 — PACK TEMPLATES (2 mockups)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOCKUP 11 — Pack Templates Complet
+Fichier source : content-sources/M3_Pack_Templates_Complet.html
+Format visuel : Grille de cartes de templates
+Éléments à afficher :
+  - Titre : "Pack Templates Prêt-à-l'Emploi"
+  - 6 badges colorés : "10 Messages" (bleu) · "5 Scripts" (vert) · "9 Emails" (violet)
+    "15 Posts" (orange) · "5 Stories" (rose) · "1 Landing" (rouge)
+  - Compteur total : "35+ modèles"
+  - Variables simulées en bleu : "[PRÉNOM]" "[ADRESSE]"
+Style : Grille de cartes, fond très légèrement grisé, couleurs vives par catégorie
+
+MOCKUP 12 — Tableau Suivi Prospects
+Fichier source : content-sources/M3_Tableau_Suivi_Prospect.xlsx
+Format visuel : Aperçu tableur Excel
+Éléments à afficher :
+  - 3 onglets visibles en bas : "Prospects" · "Registre consentements" · "Dashboard"
+  - Lignes de tableau simulées avec colonnes : Nom · Statut · Canal · Date consentement
+  - Barre de progression dashboard : "12 prospects · 8 consentements · 67%"
+  - Badge violet : "Registre conforme RGPD"
+Style : Interface tableur réaliste, onglets colorés
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MODULE 4 — GUIDE IA POUR AGENTS IMMOBILIERS (1 mockup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOCKUP 13 — Guide IA Agents Immobiliers 2026
+Format visuel : Couverture e-book premium
+Éléments à afficher :
+  - Badge doré/orange : "MODULE 4 — INCLUS DANS LE KIT"
+  - Titre blanc grand format : "Guide IA\npour Agents\nImmobiliers 2026"
+  - 4 chapitres listés en petit : "Quel IA choisir · Créer son assistant · 10 prompts essentiels · Analyser un document"
+  - Pastille : "30-40 pages"
+  - Fond : gradient sombre avec motif tech subtil (grille ou circuit)
+Style : E-book premium, look tech + immobilier, couleurs or et bleu nuit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BONUS (3 mockups)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOCKUP 14 — Diaporama Risques vs Sécurité
+Fichier source : content-sources/B1_Diaporama_Risques_vs_Securite.pptx
+Format visuel : Slide de présentation PowerPoint
+Éléments à afficher :
+  - Badge : "BONUS 1 — DIAPORAMA"
+  - Simulation de slide : deux colonnes "Risques ❌" vs "Sécurité ✓"
+  - "7 slides · Compatible tablette"
+  - Icône présentation / projecteur
+Style : Look PowerPoint professionnel, rouge pour risques, vert pour sécurité
+
+MOCKUP 15 — Calendrier Éditorial 30 Jours
+Fichier source : content-sources/B2_Calendrier_30_Jours_Contenu.html
+Format visuel : Grille calendrier mensuelle
+Éléments à afficher :
+  - Badge : "BONUS 2 — CALENDRIER ÉDITORIAL"
+  - Grille 5x6 simulant un mois (cases numérotées 1→30)
+  - Quelques cases remplies avec icônes plateforme (LinkedIn, Instagram, TikTok)
+  - Légende : "Post complet · Prompt IA inclus · Plateforme recommandée"
+Style : Calendrier mensuel coloré, cases alternées par plateforme
+
+MOCKUP 16 — Fiche Argumentaire DPE 1.9
+Fichier source : content-sources/B3_Fiche_Argumentaire_DPE_1_9.html
+Format visuel : Fiche A4 imprimable
+Éléments à afficher :
+  - Badge : "BONUS 3 — FICHE ARGUMENTAIRE"
+  - Titre : "DPE 1.9 expliqué à votre vendeur"
+  - Barre DPE simulée (A → G)
+  - Lien ADEME stylisé
+  - Mention : "À laisser après le RDV"
+  - Format : "A4 imprimable"
+Style : Fiche terrain professionnelle, fond blanc, accent vert ADEME
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUCTIONS EXPORT & INTÉGRATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Nommage des fichiers export :
+  mockup-01-guide-conformite.png
+  mockup-02-formulaire-consentement.png
+  mockup-03-checklist-11-aout.png
+  mockup-04-demineur.png
+  mockup-05-expert-dpe.png
+  mockup-06-bouclier.png
+  mockup-07-reanimateur.png
+  mockup-08-realisateur.png
+  mockup-09-copywriter.png
+  mockup-10-guide-installation.png
+  mockup-11-pack-templates.png
+  mockup-12-tableau-suivi.png
+  mockup-13-guide-ia.png
+  mockup-14-diaporama-bonus.png
+  mockup-15-calendrier-editorial.png
+  mockup-16-fiche-dpe.png
+
+Dossier de destination : assets/mockups/
+Usage dans la landing :
+  - Mockup 13 (Guide IA) → Hero visuel principal, taille max, flottant à droite
+  - Mockups 1-3 → Section Module 1, empilés en fan à 3°/6°/9° de rotation
+  - Mockups 4-10 → Section Module 2, grille 3x2 + guide solo
+  - Mockups 11-12 → Section Module 3, côte à côte
+  - Mockups 14-16 → Section Bonus, rangée horizontale
+  - Tous 16 → Section Value Stack, disposition "pile de documents"

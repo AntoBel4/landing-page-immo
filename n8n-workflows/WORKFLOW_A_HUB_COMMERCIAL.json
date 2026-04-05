@@ -2,17 +2,19 @@
   "name": "🏢 WORKFLOW A - HUB COMMERCIAL (Landing + Vente)",
   "nodes": [
     {
-      "parameters": {},
-      "id": "sticky-note-intro",
-      "name": "Sticky Note",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [140, 140],
       "parameters": {
         "content": "## 🎯 HUB COMMERCIAL - RENTRER DES MANDATS\n\n**Ce workflow gère :**\n1. 📝 Inscription Landing Page → GSheet + Brevo + Email Cadeau\n2. 💳 Paiement Stripe → Update Client + Livraison ZIP\n\n**Configuration requise :**\n- Google Sheets avec onglet 'Chasse'\n- Brevo (2 listes : Leads + Clients)\n- Stripe Webhook configuré\n\n⚠️ **IMPORTANT** : Remplacez tous les placeholders === ... ===",
         "height": 340,
         "width": 420
-      }
+      },
+      "id": "sticky-note-intro",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        140,
+        140
+      ]
     },
     {
       "parameters": {
@@ -26,7 +28,10 @@
       "name": "🔗 Webhook Landing Page",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
-      "position": [640, 240],
+      "position": [
+        640,
+        240
+      ],
       "webhookId": "lead-capture-rdm"
     },
     {
@@ -41,7 +46,10 @@
       "name": "💳 Webhook Stripe",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1.1,
-      "position": [640, 580],
+      "position": [
+        640,
+        580
+      ],
       "webhookId": "stripe-success-rdm"
     },
     {
@@ -60,19 +68,22 @@
       "name": "✅ IF Checkout Completed",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [880, 580]
+      "position": [
+        880,
+        580
+      ]
     },
     {
       "parameters": {
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1mUsvH3y4TNajVkfrBPYQFW9eoNA2rVE5nsdu9i9_aKQ",
+          "value": "1LSPws9XrEYqPJ6vPg9atTu5YwAEbvoTb8SLMq3UJiyw",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Chasse",
+          "value": "Prospects",
           "mode": "list"
         },
         "columns": {
@@ -91,7 +102,10 @@
       "name": "📊 GSheet - Ajouter Lead",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
-      "position": [920, 160],
+      "position": [
+        920,
+        160
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "8vezCiZx27e3mF7R",
@@ -104,7 +118,9 @@
         "operation": "create",
         "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
         "additionalFields": {
-          "listIds": ["3"],
+          "listIds": [
+            "3"
+          ],
           "attributes": {
             "attribute": [
               {
@@ -124,11 +140,14 @@
       "name": "📧 Brevo - Créer Contact Lead",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [920, 320],
+      "position": [
+        920,
+        320
+      ],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
-          "name": "Paperclip temp sendInBlueApi"
+          "name": "Brevo RentrerDesMandats"
         }
       }
     },
@@ -138,7 +157,7 @@
         "email": "={{ $('🔗 Webhook Landing Page').item.json.body.email }}",
         "subject": "🎁 Votre Guide IA Mandataire 2026",
         "additionalFields": {
-          "templateId": "10",
+          "templateId": "16",
           "params": {
             "parameter": [
               {
@@ -155,11 +174,14 @@
       "name": "📨 Brevo - Envoyer PDF Gratuit",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [1180, 320],
+      "position": [
+        1180,
+        320
+      ],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
-          "name": "Paperclip temp sendInBlueApi"
+          "name": "Brevo RentrerDesMandats"
         }
       }
     },
@@ -173,7 +195,10 @@
       "name": "✅ Répondre OK Landing",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1440, 240]
+      "position": [
+        1440,
+        240
+      ]
     },
     {
       "parameters": {
@@ -183,19 +208,22 @@
       "name": "🔧 Extraire Données Stripe",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1140, 480]
+      "position": [
+        1140,
+        480
+      ]
     },
     {
       "parameters": {
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1mUsvH3y4TNajVkfrBPYQFW9eoNA2rVE5nsdu9i9_aKQ",
+          "value": "1LSPws9XrEYqPJ6vPg9atTu5YwAEbvoTb8SLMq3UJiyw",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Chasse",
+          "value": "Prospects",
           "mode": "list"
         },
         "filtersUI": {
@@ -221,7 +249,10 @@
       "name": "📊 GSheet - Passer en CLIENT",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.1,
-      "position": [1400, 400],
+      "position": [
+        1400,
+        400
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "8vezCiZx27e3mF7R",
@@ -234,8 +265,12 @@
         "operation": "update",
         "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
         "additionalFields": {
-          "listIds": ["4"],
-          "unlinkListIds": ["3"],
+          "listIds": [
+            "4"
+          ],
+          "unlinkListIds": [
+            "3"
+          ],
           "attributes": {
             "attribute": [
               {
@@ -258,11 +293,14 @@
       "name": "📧 Brevo - Migrer vers Clients",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [1400, 560],
+      "position": [
+        1400,
+        560
+      ],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
-          "name": "Paperclip temp sendInBlueApi"
+          "name": "Brevo RentrerDesMandats"
         }
       }
     },
@@ -272,7 +310,7 @@
         "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
         "subject": "🎉 Votre Kit RentrerDesMandats 2026 est prêt !",
         "additionalFields": {
-          "templateId": "8",
+          "templateId": "17",
           "params": {
             "parameter": [
               {
@@ -293,11 +331,14 @@
       "name": "📨 Brevo - Livrer Kit ZIP",
       "type": "n8n-nodes-base.sendInBlue",
       "typeVersion": 1,
-      "position": [1660, 560],
+      "position": [
+        1660,
+        560
+      ],
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
-          "name": "Paperclip temp sendInBlueApi"
+          "name": "Brevo RentrerDesMandats"
         }
       }
     },
@@ -311,7 +352,10 @@
       "name": "✅ Répondre OK Stripe",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1920, 560]
+      "position": [
+        1920,
+        560
+      ]
     },
     {
       "parameters": {
@@ -323,7 +367,10 @@
       "name": "⏭️ Répondre OK (Event Ignoré)",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [1140, 720]
+      "position": [
+        1140,
+        720
+      ]
     },
     {
       "parameters": {
@@ -362,7 +409,10 @@
       "name": "⚠️ Error Handler Landing",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
-      "position": [1180, 80]
+      "position": [
+        1180,
+        80
+      ]
     },
     {
       "parameters": {
@@ -374,7 +424,10 @@
       "name": "📝 Log Erreur Landing",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.2,
-      "position": [1440, 80]
+      "position": [
+        1440,
+        80
+      ]
     },
     {
       "parameters": {
@@ -413,7 +466,10 @@
       "name": "⚠️ Error Handler Stripe",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3,
-      "position": [1660, 720]
+      "position": [
+        1660,
+        720
+      ]
     },
     {
       "parameters": {
@@ -425,7 +481,116 @@
       "name": "📝 Log Erreur Stripe",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.2,
-      "position": [1920, 720]
+      "position": [
+        1920,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendTransacEmail",
+        "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
+        "additionalFields": {
+          "templateId": "18",
+          "params": {
+            "parameter": [
+              {
+                "key": "download_url",
+                "value": "https://n8n.rentrerdesmandats.fr/webhook/kit-mandataire-2026-zip"
+              },
+              {
+                "key": "prenom",
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] }}"
+              },
+              {
+                "key": "unsubscribe_url",
+                "value": "https://rentrerdesmandats.fr/unsubscribe"
+              },
+              {
+                "key": "calendly_url",
+                "value": "https://calendly.com/antoine-estarellas/nouvelle-reunion"
+              }
+            ]
+          },
+          "senderEmail": "commande@rentrerdesmandats.fr",
+          "senderName": "Antoine — RentrerDesMandats"
+        }
+      },
+      "id": "brevo-livrer-kit-297",
+      "name": "📨 Brevo - Livrer Kit Deploiement 297€",
+      "type": "n8n-nodes-base.sendInBlue",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        740
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Brevo RentrerDesMandats"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendTransacEmail",
+        "email": "={{ $('🔧 Extraire Données Stripe').item.json.email }}",
+        "additionalFields": {
+          "templateId": "19",
+          "params": {
+            "parameter": [
+              {
+                "key": "download_url",
+                "value": "https://n8n.rentrerdesmandats.fr/webhook/kit-mandataire-2026-zip"
+              },
+              {
+                "key": "prenom",
+                "value": "={{ $('🔧 Extraire Données Stripe').item.json.name.split(' ')[0] }}"
+              },
+              {
+                "key": "unsubscribe_url",
+                "value": "https://rentrerdesmandats.fr/unsubscribe"
+              },
+              {
+                "key": "calendly_url",
+                "value": "https://calendly.com/antoine-estarellas/session-initiale-accompagnement-premium"
+              }
+            ]
+          },
+          "senderEmail": "commande@rentrerdesmandats.fr",
+          "senderName": "Antoine — RentrerDesMandats"
+        }
+      },
+      "id": "brevo-livrer-kit-497",
+      "name": "📨 Brevo - Livrer Kit Premium 497€",
+      "type": "n8n-nodes-base.sendInBlue",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        920
+      ],
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "k7UrvlNWAZBrUGY7",
+          "name": "Brevo RentrerDesMandats"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Routing par montant Stripe\n\n- amount = 6700 (67€) → templateId 17\n- amount = 29700 (297€) → templateId 18 + Calendly\n- amount = 49700 (497€) → templateId 19 + Calendly\n\n⚠️ Connecter ces nœuds à un Switch sur `amount` issu de \"Extraire Données Stripe\".",
+        "height": 220,
+        "width": 380,
+        "color": 4
+      },
+      "id": "sticky-email-routing",
+      "name": "Note - Routing Emails par Montant",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        740
+      ]
     }
   ],
   "connections": {
@@ -593,10 +758,14 @@
       ]
     },
     "📊 GSheet - Ajouter Lead": {
-      "main": [[]]
+      "main": [
+        []
+      ]
     },
     "📊 GSheet - Passer en CLIENT": {
-      "main": [[]]
+      "main": [
+        []
+      ]
     }
   },
   "settings": {

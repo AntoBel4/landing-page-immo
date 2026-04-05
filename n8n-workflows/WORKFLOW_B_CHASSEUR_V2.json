@@ -86,7 +86,7 @@
       "position": [1280, 300],
       "credentials": {
         "httpHeaderAuth": {
-          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "id": "I5pmSgOYoekXk0qf",
           "name": "Apify API Key"
         }
       }
@@ -126,7 +126,7 @@
       "position": [1760, 300],
       "credentials": {
         "httpHeaderAuth": {
-          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "id": "I5pmSgOYoekXk0qf",
           "name": "Apify API Key"
         }
       }
@@ -199,7 +199,7 @@
       "position": [2240, 420],
       "credentials": {
         "httpHeaderAuth": {
-          "id": "=== CRÉER CREDENTIAL HTTP HEADER AUTH ===",
+          "id": "I5pmSgOYoekXk0qf",
           "name": "Apify API Key"
         }
       }
@@ -272,7 +272,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
+          "value": "1LSPws9XrEYqPJ6vPg9atTu5YwAEbvoTb8SLMq3UJiyw",
           "mode": "id"
         },
         "sheetName": {

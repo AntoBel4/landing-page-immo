@@ -46,7 +46,7 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
+          "value": "1LSPws9XrEYqPJ6vPg9atTu5YwAEbvoTb8SLMq3UJiyw",
           "mode": "id"
         },
         "sheetName": {
@@ -185,7 +185,7 @@
       "credentials": {
         "sendInBlueApi": {
           "id": "k7UrvlNWAZBrUGY7",
-          "name": "Paperclip temp sendInBlueApi"
+          "name": "Brevo RentrerDesMandats"
         }
       }
     },
@@ -194,7 +194,7 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "13RS20OAuHpcAk4LtkQ8bpQoD744CJP7tUjiT9TVR7nQ",
+          "value": "1LSPws9XrEYqPJ6vPg9atTu5YwAEbvoTb8SLMq3UJiyw",
           "mode": "id"
         },
         "sheetName": {

@@ -4,4 +4,9 @@ KIT_MANDATAIRE_2026_PRO/
 node_modules/
 .env
 .DS_Store
-js/
+
+# Claude Code internals
+.claude/
+
+# Sources de travail locales
+content-sources/
